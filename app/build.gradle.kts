@@ -5,11 +5,19 @@ plugins {
 }
 
 android {
+<<<<<<< HEAD
     namespace = "com.openknights.app"
     compileSdk = 36
 
     defaultConfig {
         applicationId = "com.openknights.app"
+=======
+    namespace = "com.example.openknights_mobile"
+    compileSdk = 36
+
+    defaultConfig {
+        applicationId = "com.example.openknights_mobile"
+>>>>>>> e8f8f97884f8dde82378f80651433a3e8b3c6dc2
         minSdk = 32
         targetSdk = 36
         versionCode = 1
@@ -53,7 +61,10 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
+<<<<<<< HEAD
     implementation(project(":core:designsystem"))
+=======
+>>>>>>> e8f8f97884f8dde82378f80651433a3e8b3c6dc2
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)

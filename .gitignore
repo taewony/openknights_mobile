@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 *.iml
 .gradle
 /local.properties
@@ -13,3 +14,45 @@
 .externalNativeBuild
 .cxx
 local.properties
+=======
+# ===============================================
+# Android Studio & Gradle
+# ===============================================
+*.iml
+.gradle/
+/local.properties
+/build/
+.DS_Store
+/captures/
+.externalNativeBuild/
+.cxx/
+
+# ===============================================
+# IDE (IntelliJ, Android Studio)
+# ===============================================
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# ===============================================
+# 보안: 키 및 서비스 설정 파일 (매우 중요)
+# ===============================================
+*.jks
+*.keystore
+google-services.json
+
+# ===============================================
+# Firebase (추천)
+# ===============================================
+crashlytics.properties
+crashlytics-build.properties
+crashlytics-output.jar
+
+# ===============================================
+# 기타 (추천)
+# ===============================================
+*.log
+>>>>>>> e8f8f97884f8dde82378f80651433a3e8b3c6dc2

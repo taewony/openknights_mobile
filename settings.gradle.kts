@@ -21,5 +21,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "openknights_mobile"
 include(":app")
+<<<<<<< HEAD
 include(":core")
 include(":core:designsystem")
+=======
+>>>>>>> e8f8f97884f8dde82378f80651433a3e8b3c6dc2
