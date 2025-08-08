@@ -2,4 +2,6 @@
 <resources>
 
     <style name="Theme.Openknights_mobile" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.Openknights" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>

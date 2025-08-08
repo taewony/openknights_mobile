@@ -14,15 +14,15 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        google()
+        google() // <-- 이 줄이 가장 중요합니다. 안드로이드 플러그인은 여기에 있습니다.
         mavenCentral()
+        gradlePluginPortal()
     }
 }
 
 rootProject.name = "openknights_mobile"
 include(":app")
-<<<<<<< HEAD
-include(":core")
+include(":app")
 include(":core:designsystem")
-=======
->>>>>>> e8f8f97884f8dde82378f80651433a3e8b3c6dc2
+include(":core:data")
+include(":core:model")

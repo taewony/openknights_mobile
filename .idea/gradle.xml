@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
@@ -11,11 +10,10 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-<<<<<<< HEAD
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/data" />
             <option value="$PROJECT_DIR$/core/designsystem" />
-=======
->>>>>>> e8f8f97884f8dde82378f80651433a3e8b3c6dc2
+            <option value="$PROJECT_DIR$/core/model" />
           </set>
         </option>
       </GradleProjectSettings>
