@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "term": "2025-1st",
+    "contestStart": "2025-04-28",
+    "preRoundStart": "2025-05-28",
+    "finalRoundStart": "2025-06-10",
+    "contestEnd": "2025-06-13"
+  },
+  {
+    "id": 2,
+    "term": "2025-2st",
+    "contestStart": null,
+    "preRoundStart": null,
+    "finalRoundStart": null,
+    "contestEnd": null
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "term": "2025-1st",
+    "description": "2025년 상반기 SW중심대학 오픈소스 SW활용 경진대회",
+    "staff": [
+      "김태원",
+      "김주경"
+    ],
+    "phase": "FINISHED"
+  },
+  {
+    "id": 2,
+    "term": "2025-2st",
+    "description": "2025년 상반기 SW중심대학 오픈소스 SW활용 경진대회",
+    "staff": [
+      "김태원",
+      "김주경"
+    ],
+    "phase": null
+  }
+]

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization) // Kotlinx Serialization 플러그인 적용
 }
 
 android {
@@ -40,4 +41,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.kotlinx.serialization.json) // JSON 직렬화 라이브러리
+
+    implementation(project(":core:model"))
 }

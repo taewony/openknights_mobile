@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "studentId": "20251133",
+    "name": "김태원",
+    "introduction": "취미가 코딩",
+    "roles": [
+      "MENTOR", "ADMIN"
+    ],
+    "imageUrl": "",
+    "projects": []
+  },
+  {
+    "id": 2,
+    "studentId": "",
+    "name": "김주경",
+    "introduction": "",
+    "roles": [
+      "ADMIN"
+    ],
+    "imageUrl": "",
+    "projects": []
+  }
+]
