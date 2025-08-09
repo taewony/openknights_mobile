@@ -59,4 +59,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(project(":core:designsystem"))
+    implementation(project(":feature"))
 }
