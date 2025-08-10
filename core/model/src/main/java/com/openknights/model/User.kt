@@ -1,5 +1,8 @@
 package com.openknights.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class User (
     val id: Long,
     val studentId: String, // 학번,
