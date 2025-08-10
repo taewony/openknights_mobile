@@ -17,16 +17,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.openknights.feature.user.UserViewModel
+
 @Composable
 fun UserScreen(
     userViewModel : UserViewModel = viewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by userViewModel.uiState.collectAsState()
 
     UserScreenContent(
         uiState = uiState,
-        onLoadUserClick = { viewModel.loadUser() }
+        onLoadUserClick = { userViewModel.loadUser("1") }
     )
 }
 
