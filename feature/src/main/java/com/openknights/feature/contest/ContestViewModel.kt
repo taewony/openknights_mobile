@@ -32,6 +32,19 @@ class ContestViewModel(private val contestRepository: ContestRepository) : ViewM
             }
         }
     }
+
+    fun saveContests(contests: List<Contest>) {
+        viewModelScope.launch {
+            try {
+                contests.forEach { contest ->
+                    contestRepository.saveContest(contest)
+                    println("Contest saved successfully: ${contest.id}")
+                }
+            } catch (e: Exception) {
+                println("Error saving contests: ${e.message}")
+            }
+        }
+    }
 }
 
 class ContestViewModelFactory(private val contestRepository: ContestRepository) : ViewModelProvider.Factory {

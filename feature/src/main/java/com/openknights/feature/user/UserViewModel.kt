@@ -4,11 +4,14 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 import com.openknights.data.repository.UserRepository
 import com.openknights.model.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 private const val TAG = "UserViewModel"
 
@@ -42,6 +45,21 @@ class UserViewModel(private val userRepository: UserRepository) : ViewModel() {
             } catch (e: Exception) {
                 Log.e(TAG, "An error occurred while loading users.", e)
                 _uiState.value = UserUiState.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
+
+    fun saveUsersToFirestore(users: List<User>) {
+        viewModelScope.launch {
+            val db = Firebase.firestore
+            users.forEach { user ->
+                try {
+                    // Use user.uid as the document ID
+                    db.collection("users").document(user.uid).set(user).await()
+                    Log.d(TAG, "User ${user.uid} saved to Firestore successfully.")
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error saving user ${user.uid} to Firestore: ${e.message}", e)
+                }
             }
         }
     }

@@ -1,17 +1,22 @@
 package com.openknights.data.repository
 
 import android.content.Context
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import com.openknights.data.R
 import com.openknights.model.Contest
 import com.openknights.model.Phase
+import kotlinx.coroutines.tasks.await
 import kotlinx.serialization.json.Json
 import java.io.InputStream
 
 interface ContestRepository {
     suspend fun getContests(): List<Contest>
+    suspend fun saveContest(contest: Contest)
 }
 
-class ContestRepositoryImpl(private val context: Context) : ContestRepository {
+class ContestRepositoryImpl(private val context: Context, private val firestore: FirebaseFirestore) : ContestRepository {
     override suspend fun getContests(): List<Contest> {
         // 1. res/raw에서 JSON 파일을 InputStream으로 엽니다.
         val inputStream: InputStream = context.resources.openRawResource(R.raw.fake_contest)
@@ -47,5 +52,9 @@ class ContestRepositoryImpl(private val context: Context) : ContestRepository {
             )
         )
         */
+    }
+
+    override suspend fun saveContest(contest: Contest) {
+        Firebase.firestore.collection("contests").document(contest.id.toString()).set(contest).await()
     }
 }

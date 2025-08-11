@@ -45,4 +45,10 @@ dependencies {
     implementation(libs.kotlinx.serialization.json) // JSON 직렬화 라이브러리
 
     implementation(project(":core:model"))
+
+    // Firebase Integration
+    implementation(platform(libs.firebase.bom)) // Firebase 버전 통합 관리
+    implementation(libs.firebase.common) // Firebase 진입점(Firebase.*)
+    implementation(libs.firebase.firestore)
+    implementation(libs.coroutines.play.services) // await() 지원
 }

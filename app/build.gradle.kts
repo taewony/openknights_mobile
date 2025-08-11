@@ -1,7 +1,10 @@
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -60,4 +63,10 @@ dependencies {
 
     implementation(project(":core:designsystem"))
     implementation(project(":feature"))
+
+    // Firebase Integration
+    implementation(platform(libs.firebase.bom)) // BoM 선언
+    implementation(libs.firebase.common) // Firebase 클래스 진입점
+    implementation(libs.firebase.auth)       // Auth API
+    implementation(libs.coroutines.play.services) // await() 지원
 }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,20 +26,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 import com.openknights.data.repository.ContestRepositoryImpl
 import com.openknights.model.Contest
+import com.openknights.model.Phase
 
 @Composable
 fun ContestScreen(modifier: Modifier = Modifier) {
     val contestViewModel: ContestViewModel = viewModel(
-        factory = ContestViewModelFactory(ContestRepositoryImpl(LocalContext.current.applicationContext))
+        factory = ContestViewModelFactory(ContestRepositoryImpl(LocalContext.current.applicationContext, Firebase.firestore))
     )
     val uiState by contestViewModel.uiState.collectAsState()
 
     ContestScreenContent(
         modifier = modifier,
         uiState = uiState,
-        onLoadClick = { contestViewModel.loadContests() }
+        onLoadClick = { contestViewModel.loadContests() },
+        onSaveClick = { contests -> contestViewModel.saveContests(contests) } // Pass contests to save
     )
 }
 
@@ -46,7 +51,8 @@ fun ContestScreen(modifier: Modifier = Modifier) {
 fun ContestScreenContent(
     modifier: Modifier = Modifier,
     uiState: ContestUiState,
-    onLoadClick: () -> Unit
+    onLoadClick: () -> Unit,
+    onSaveClick: (List<Contest>) -> Unit // Changed parameter to List<Contest>
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
@@ -79,12 +85,27 @@ fun ContestScreenContent(
             }
         }
 
-        if (uiState !is ContestUiState.Loading) {
-            Button(
-                onClick = onLoadClick,
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Text(if (uiState is ContestUiState.Success) "Reload Contests" else "Load Contests")
+        Row( // Use Row for buttons
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            if (uiState !is ContestUiState.Loading) {
+                Button(
+                    onClick = onLoadClick,
+                    modifier = Modifier.weight(1f).padding(end = 8.dp)
+                ) {
+                    Text(if (uiState is ContestUiState.Success) "Reload Contests" else "Load Contests")
+                }
+            }
+
+            // Show Save button only when data is successfully loaded
+            if (uiState is ContestUiState.Success) {
+                Button(
+                    onClick = { onSaveClick(uiState.contests) }, // Pass displayed contests
+                    modifier = Modifier.weight(1f).padding(start = 8.dp)
+                ) {
+                    Text("Save Displayed Contests")
+                }
             }
         }
     }

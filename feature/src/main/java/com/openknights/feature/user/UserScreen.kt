@@ -44,7 +44,8 @@ fun UserScreen(
     UserScreenContent(
         modifier = modifier,
         uiState = uiState,
-        onLoadClick = { userViewModel.loadUsers() } // 버튼 클릭 시 로딩
+        onLoadClick = { userViewModel.loadUsers() }, // 버튼 클릭 시 로딩
+        onSaveClick = { users -> userViewModel.saveUsersToFirestore(users) } // Firestore에 저장
     )
 }
 
@@ -52,7 +53,8 @@ fun UserScreen(
 fun UserScreenContent(
     modifier: Modifier = Modifier,
     uiState: UserUiState,
-    onLoadClick: () -> Unit
+    onLoadClick: () -> Unit,
+    onSaveClick: (List<User>) -> Unit // Add this parameter
 ) {
     Column(
         modifier = modifier
@@ -98,6 +100,13 @@ fun UserScreenContent(
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = onLoadClick, enabled = uiState !is UserUiState.Loading) {
                 Text(if (uiState is UserUiState.Loading) "Loading..." else "Reload Users")
+            }
+            Spacer(modifier = Modifier.height(8.dp)) // Add a small spacer
+            Button(
+                onClick = { onSaveClick(uiState.users) }, // Call onSaveClick with the user list
+                enabled = uiState !is UserUiState.Loading
+            ) {
+                Text("Save Users to Firestore")
             }
         }
     }

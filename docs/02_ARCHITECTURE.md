@@ -110,3 +110,52 @@
     *   Compose `Screen`은 `State`의 변화를 감지하고, 새로운 데이터로 화면을 다시 그립니다(Recomposition).
 
 이처럼 데이터는 단방향으로 흐르며, 각 모듈은 자신의 책임만 다합니다. 이 구조를 잘 이해하고 따르면 누구나 깨끗하고 안정적인 코드를 작성할 수 있습니다.
+
+  ### 모듈별 역할 및 의존성 분석:
+
+   * `app` 모듈:
+       * 최상위 애플리케이션 모듈입니다.
+       * 사용자에게 보여지는 최종 앱을 구성하며, feature 모듈과 core:designsystem 모듈을 통합하는 역할을
+         합니다.
+       * 의존성: feature, core:designsystem
+
+   * `core` 모듈 그룹:
+       * 프로젝트 전반에서 사용되는 공통 기능 및 기반 코드를 모아놓은 그룹입니다.
+       * `core:model`:
+           * 데이터 구조(DTO, Entity 등)를 정의하는 가장 기본적인 모듈입니다.
+           * 다른 모듈에 대한 의존성이 없는 순수한 Kotlin/Java 라이브러리 모듈의 성격을 가집니다.
+           * 의존성: 없음
+       * `core:data`:
+           * 데이터 소스(네트워크, 데이터베이스 등)와의 통신을 담당합니다. Repository 패턴 등이 구현될 수
+             있습니다.
+           * 어떤 데이터를 주고받을지 알아야 하므로 core:model에 의존합니다.
+           * 의존성: core:model
+       * `core:designsystem`:
+           * 공통적으로 사용될 UI 컴포넌트(버튼, 색상, 테마 등)를 정의합니다.
+           * 다른 모듈에 대한 의존성이 거의 없습니다.
+           * 의존성: 없음
+		   
+   * `feature` 모듈:
+       * 실질적인 기능(UI, 비즈니스 로직)을 구현하는 모듈입니다.
+       * 데이터를 가져오기 위해 core:data에, 데이터 모델을 사용하기 위해 core:model에, 그리고 공통 UI
+         컴포넌트를 사용하기 위해 core:designsystem에 의존합니다.
+       * 의존성: core:data, core:model, core:designsystem
+
+```
+    1 feature/
+    2 └── src/
+    3     └── main/
+    4         └── java/
+    5             └── com/
+    6                 └── openknights/
+    7                     └── feature/
+    8                         ├── user/
+    9                         │   ├── UserScreen.kt
+   10                         │   └── UserViewModel.kt
+   11                         ├── contest/
+   12                         │   ├── ContestScreen.kt
+   13                         │   └── ContestViewModel.kt
+   14                         └── project/
+   15                             ├── ProjectScreen.kt
+   16                             └── ProjectViewModel.kt
+```

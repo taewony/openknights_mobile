@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -34,6 +36,7 @@ android {
     buildFeatures {
         compose = true
     }
+
 }
 
 dependencies {
@@ -45,6 +48,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -60,4 +64,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest) // Changed
     implementation(libs.lifecycle.viewmodel.compose)
 
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.common) // Firebase 클래스 제공
+    implementation(libs.firebase.firestore) // Added Firestore dependency
+    implementation(libs.coroutines.play.services)
 }
