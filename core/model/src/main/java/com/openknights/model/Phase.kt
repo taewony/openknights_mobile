@@ -1,6 +1,10 @@
 package com.openknights.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 enum class Phase(val label: String) {
+    PLANED("예정"),
     REGISTERED("등록"),
     PRELIMINARY_SUBMITTED("예선 제출"),
     PRELIMINARY_PASSED("예선 통과"),

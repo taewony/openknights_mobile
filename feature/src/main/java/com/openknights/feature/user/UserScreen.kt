@@ -30,6 +30,7 @@ import com.openknights.model.User
 
 @Composable
 fun UserScreen(
+    modifier: Modifier = Modifier,
     userViewModel: UserViewModel = viewModel(
         factory = UserViewModelFactory(
             UserRepositoryImpl(LocalContext.current.applicationContext)
@@ -38,27 +39,27 @@ fun UserScreen(
 ) {
     val uiState by userViewModel.uiState.collectAsState()
 
-    // 화면이 처음 구성될 때 사용자 목록을 자동으로 불러오도록 LaunchedEffect 사용
-    LaunchedEffect(Unit) {
-        userViewModel.loadUsers()
-    }
+    // LaunchedEffect를 제거하여 자동 로딩을 방지합니다.
 
     UserScreenContent(
+        modifier = modifier,
         uiState = uiState,
-        onReloadClick = { userViewModel.loadUsers() } // 버튼 클릭 시 재로딩
+        onLoadClick = { userViewModel.loadUsers() } // 버튼 클릭 시 로딩
     )
 }
 
 @Composable
 fun UserScreenContent(
+    modifier: Modifier = Modifier,
     uiState: UserUiState,
-    onReloadClick: () -> Unit
+    onLoadClick: () -> Unit
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center // 컨텐츠를 중앙으로 정렬
     ) {
         Box(
             modifier = Modifier.weight(1f),
@@ -80,16 +81,24 @@ fun UserScreenContent(
                     )
                 }
                 is UserUiState.Initial -> {
-                    Text(
-                        text = "Loading user data...",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+                    // 초기 상태일 때 아무것도 표시하지 않거나, 안내 문구를 표시할 수 있습니다.
+                    // 여기서는 버튼이 중앙에 오도록 Box를 비워둡니다.
                 }
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = onReloadClick, enabled = uiState !is UserUiState.Loading) {
-            Text(if (uiState is UserUiState.Loading) "Loading..." else "Reload Users")
+
+        // 초기 상태이거나 에러가 발생했을 때만 버튼을 크게 표시
+        if (uiState is UserUiState.Initial || uiState is UserUiState.Error) {
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = onLoadClick, enabled = uiState !is UserUiState.Loading) {
+                Text("Load Users")
+            }
+        } else if (uiState is UserUiState.Success) {
+            // 데이터가 성공적으로 로드된 후에는 'Reload' 버튼을 표시
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = onLoadClick, enabled = uiState !is UserUiState.Loading) {
+                Text(if (uiState is UserUiState.Loading) "Loading..." else "Reload Users")
+            }
         }
     }
 }

@@ -1,5 +1,8 @@
 package com.openknights.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Contest(
     val id: Long,
     val term: String,

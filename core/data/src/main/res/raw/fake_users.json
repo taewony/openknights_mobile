@@ -1,5 +1,6 @@
 [
   {
+    "uid": "uid-kim-taewon",
     "id": 1,
     "studentId": "20251133",
     "name": "김태원",
@@ -11,6 +12,7 @@
     "projects": []
   },
   {
+    "uid": "uid-kim-jukyung",
     "id": 2,
     "studentId": "",
     "name": "김주경",
