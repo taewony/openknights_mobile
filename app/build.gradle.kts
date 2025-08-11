@@ -69,4 +69,10 @@ dependencies {
     implementation(libs.firebase.common) // Firebase 클래스 진입점
     implementation(libs.firebase.auth)       // Auth API
     implementation(libs.coroutines.play.services) // await() 지원
+
+    // --- Navigation 의존성 ---
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 }

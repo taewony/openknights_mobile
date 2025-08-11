@@ -122,7 +122,12 @@ Firestore 데이터베이스는 다음과 같은 구조로 설계되었습니다
 # 1. :core:designsystem 모듈 생성 후, app 모듈에서 해당 테마를 사용하도록 수정
 # 2. :core:model 모듈에 Firestore 데이터 구조에 맞는 데이터 클래스 정의
 # 3. :core:data 모듈에 임시 데이터(Fake Data)를 제공하는 Repository 구현
+# 4. Repository "데이터 창고 관리자" 역할
+UI(화면)나 비즈니스 로직은 데이터가 어디서 오는지(Fake Data인지, 서버 API인지, 로컬 DB인지) 신경 쓸 필요 없이, 그냥 "데이터 창고 관리자"에게 필요한 데이터를 요청하기만 하면 됩니다.
 ````
+
+- users: roles 및 projects를 가지고 있다.
+
 
 ### 2\. 특정 모듈만 빌드하여 개발 시간 단축
 

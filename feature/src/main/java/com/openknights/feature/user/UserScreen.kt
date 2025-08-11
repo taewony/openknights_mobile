@@ -39,13 +39,16 @@ fun UserScreen(
 ) {
     val uiState by userViewModel.uiState.collectAsState()
 
-    // LaunchedEffect를 제거하여 자동 로딩을 방지합니다.
+    // Automatically load users when the screen is composed
+    LaunchedEffect(Unit) {
+        userViewModel.loadUsers()
+    }
 
     UserScreenContent(
         modifier = modifier,
         uiState = uiState,
-        onLoadClick = { userViewModel.loadUsers() }, // 버튼 클릭 시 로딩
-        onSaveClick = { users -> userViewModel.saveUsersToFirestore(users) } // Firestore에 저장
+        onLoadClick = { /* Commented out */ }, // 버튼 클릭 시 로딩
+        onSaveClick = { /* Commented out */ } // Firestore에 저장
     )
 }
 
@@ -89,6 +92,8 @@ fun UserScreenContent(
             }
         }
 
+        /*
+        // Commented out: Load and Save buttons
         // 초기 상태이거나 에러가 발생했을 때만 버튼을 크게 표시
         if (uiState is UserUiState.Initial || uiState is UserUiState.Error) {
             Spacer(modifier = Modifier.height(16.dp))
@@ -109,6 +114,7 @@ fun UserScreenContent(
                 Text("Save Users to Firestore")
             }
         }
+        */
     }
 }
 

@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -39,11 +40,16 @@ fun ContestScreen(modifier: Modifier = Modifier) {
     )
     val uiState by contestViewModel.uiState.collectAsState()
 
+    // Automatically load contests when the screen is composed
+    LaunchedEffect(Unit) {
+        contestViewModel.loadContests()
+    }
+
     ContestScreenContent(
         modifier = modifier,
         uiState = uiState,
-        onLoadClick = { contestViewModel.loadContests() },
-        onSaveClick = { contests -> contestViewModel.saveContests(contests) } // Pass contests to save
+        onLoadClick = { /* Commented out */ },
+        onSaveClick = { /* Commented out */ } // Pass contests to save
     )
 }
 
@@ -85,6 +91,8 @@ fun ContestScreenContent(
             }
         }
 
+        /*
+        // Commented out: Load and Save buttons
         Row( // Use Row for buttons
             modifier = Modifier.fillMaxWidth().padding(16.dp),
             horizontalArrangement = Arrangement.SpaceAround
@@ -108,6 +116,7 @@ fun ContestScreenContent(
                 }
             }
         }
+        */
     }
 }
 
@@ -118,6 +127,13 @@ fun ContestList(contests: List<Contest>) {
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        item {
+            Text(
+                text = "우송대 오픈소스 경진대회",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
         items(contests) { contest ->
             ContestCard(contest = contest)
         }
