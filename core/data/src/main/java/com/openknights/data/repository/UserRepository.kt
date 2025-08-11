@@ -11,17 +11,20 @@ interface UserRepository {
      * 모든 사용자 목록을 가져옵니다.
      * @return User의 리스트
      */
-    fun getUsers(): List<User>
+    // fun getUsers(): List<User>
+    suspend fun getUsers(): List<User>
 
     /**
      * 학번(studentId)으로 특정 사용자를 찾습니다.
      * @param studentId 찾고자 하는 사용자의 학번
      * @return 찾은 User 객체, 없으면 null
      */
-    fun getUserByStudentId(studentId: String): User?
+    // fun getUserByStudentId(studentId: String): User?
+    suspend fun getUserByStudentId(studentId: String): User?
 
     /**
      * 이름(name)으로 특정 사용자를 찾습니다.
      */
-    fun getUserByName(name: String): User?
+    // fun getUserByName(name: String): User?
+    suspend fun getUserByName(name: String): User?
 }

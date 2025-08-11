@@ -2,8 +2,10 @@ package com.openknights.data.repository
 
 import android.content.Context
 import android.util.Log
+import com.google.firebase.firestore.FirebaseFirestore
 import com.openknights.data.R
 import com.openknights.model.User
+import kotlinx.coroutines.tasks.await
 import kotlinx.serialization.json.Json
 import java.io.InputStream
 
@@ -14,8 +16,9 @@ private const val TAG = "UserRepository"
  *
  * @property context 리소스에 접근하기 위한 Application Context
  */
-class UserRepositoryImpl(private val context: Context) : UserRepository {
+class UserRepositoryImpl(private val context: Context, private val firestore: FirebaseFirestore) : UserRepository {
 
+    /*
     // JSON 파일을 읽어 파싱한 사용자 목록을 저장하는 변수
     // lazy를 사용해 처음 접근할 때 한 번만 파일을 읽도록 구현
     private val _users: List<User> by lazy {
@@ -37,23 +40,58 @@ class UserRepositoryImpl(private val context: Context) : UserRepository {
             emptyList()
         }
     }
+    */
 
-    override fun getUsers(): List<User> {
-        return _users
-    }
-
-    override fun getUserByStudentId(studentId: String): User? {
-        Log.d(TAG, "Searching for user with studentId: $studentId")
-        val user = _users.find { it.studentId == studentId }
-        if (user == null) {
-            Log.w(TAG, "User with studentId: $studentId not found.")
-        } else {
-            Log.d(TAG, "User found: ${user.name}")
+    override suspend fun getUsers(): List<User> {
+        // return _users
+        return try {
+            val snapshot = firestore.collection("users").get().await()
+            val users = snapshot.toObjects(User::class.java)
+            Log.d(TAG, "Successfully fetched ${users.size} users from Firestore.")
+            users
+        } catch (e: Exception) {
+            Log.e(TAG, "Error fetching users from Firestore.", e)
+            emptyList()
         }
-        return user
     }
 
-    override fun getUserByName(name: String): User? {
-        return _users.find { it.name == name }
+    override suspend fun getUserByStudentId(studentId: String): User? {
+        // return _users.find { it.studentId == studentId }
+        return try {
+            val snapshot = firestore.collection("users")
+                .whereEqualTo("studentId", studentId)
+                .get()
+                .await()
+            val user = snapshot.toObjects(User::class.java).firstOrNull()
+            if (user != null) {
+                Log.d(TAG, "User found with studentId: $studentId")
+            } else {
+                Log.w(TAG, "User with studentId: $studentId not found.")
+            }
+            user
+        } catch (e: Exception) {
+            Log.e(TAG, "Error fetching user by studentId from Firestore.", e)
+            null
+        }
+    }
+
+    override suspend fun getUserByName(name: String): User? {
+        // return _users.find { it.name == name }
+        return try {
+            val snapshot = firestore.collection("users")
+                .whereEqualTo("name", name)
+                .get()
+                .await()
+            val user = snapshot.toObjects(User::class.java).firstOrNull()
+            if (user != null) {
+                Log.d(TAG, "User found with name: $name")
+            } else {
+                Log.w(TAG, "User with name: $name not found.\n")
+            }
+            user
+        } catch (e: Exception) {
+            Log.e(TAG, "Error fetching user by name from Firestore.", e)
+            null
+        }
     }
 }

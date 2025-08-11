@@ -63,6 +63,7 @@ dependencies {
 
     implementation(project(":core:designsystem"))
     implementation(project(":feature"))
+    implementation(project(":core:model"))
 
     // Firebase Integration
     implementation(platform(libs.firebase.bom)) // BoM 선언

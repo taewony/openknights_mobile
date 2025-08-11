@@ -40,6 +40,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.openknights.feature.contest.ContestsScreen
+import com.openknights.feature.user.UsersScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -76,10 +78,10 @@ class AuthViewModel : ViewModel() {
 
 // --- Navigation 대상 정의
 sealed interface ScreenEntry
-data object ContestListScreenEntry : ScreenEntry
-data class ProjectListScreenEntry(val term: String) : ScreenEntry
+data object ContestsScreenEntry : ScreenEntry
+data class ProjectsScreenEntry(val term: String) : ScreenEntry
 data class ProjectDetailScreenEntry(val projectId: String) : ScreenEntry
-data object UserScreenEntry : ScreenEntry
+data object UsersScreenEntry : ScreenEntry
 data class NoticeScreenEntry(val isLoggedIn: Boolean) : ScreenEntry
 data object RegisterScreenEntry : ScreenEntry
 data object LoginScreenEntry : ScreenEntry
@@ -87,7 +89,7 @@ data object LoginScreenEntry : ScreenEntry
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OpenKnightsApp() {
-    val backStack = remember { mutableStateListOf<ScreenEntry>(ContestListScreenEntry) }
+    val backStack = remember { mutableStateListOf<ScreenEntry>(ContestsScreenEntry) }
     val currentEntry = backStack.lastOrNull()
     val latestContestTerm = FakeOpenKnightsData.fakeContests.firstOrNull()?.term ?: ""
     var showMenu by remember { mutableStateOf(false) }
@@ -193,28 +195,28 @@ fun OpenKnightsApp() {
         bottomBar = {
             NavigationBar {
                 NavigationBarItem(
-                    selected = currentEntry is ContestListScreenEntry,
+                    selected = currentEntry is ContestsScreenEntry,
                     onClick = {
                         backStack.clear()
-                        backStack.add(ContestListScreenEntry)
+                        backStack.add(ContestsScreenEntry)
                     },
                     icon = { Icon(Icons.Default.Home, contentDescription = null) },
                     label = { Text("HOME") }
                 )
                 NavigationBarItem(
-                    selected = currentEntry is ProjectListScreenEntry,
+                    selected = currentEntry is ProjectsScreenEntry,
                     onClick = {
                         backStack.clear()
-                        backStack.add(ProjectListScreenEntry(latestContestTerm))
+                        backStack.add(ProjectsScreenEntry(latestContestTerm))
                     },
                     icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = null) },
                     label = { Text("프로젝트") }
                 )
                 NavigationBarItem(
-                    selected = currentEntry is UserScreenEntry,
+                    selected = currentEntry is UsersScreenEntry,
                     onClick = {
                         backStack.clear()
-                        backStack.add(UserScreenEntry)
+                        backStack.add(UsersScreenEntry)
                     },
                     icon = { Icon(Icons.Default.Person, contentDescription = null) },
                     label = { Text("사용자") }
@@ -225,13 +227,13 @@ fun OpenKnightsApp() {
         // NavDisplay로 화면 전환 처리 (Dummy Implementation)
         Box(modifier = Modifier.padding(innerPadding)) {
             when (val entry = backStack.lastOrNull()) {
-                is ContestListScreenEntry -> ContestListScreen(
+                is ContestsScreenEntry -> ContestsScreen(
                     onContestClick = { contest ->
-                        backStack.add(ProjectListScreenEntry(contest.term))
+                        backStack.add(ProjectsScreenEntry(contest.term))
                     },
                     padding = innerPadding
                 )
-                is ProjectListScreenEntry -> ProjectListScreen(
+                is ProjectsScreenEntry -> ProjectsScreen(
                     contestTerm = entry.term,
                     onProjectClick = { project ->
                         backStack.add(ProjectDetailScreenEntry(project.id))
@@ -239,7 +241,7 @@ fun OpenKnightsApp() {
                     onShowErrorSnackBar = {},
                     padding = innerPadding
                 )
-                is UserScreenEntry -> UserScreen(padding = innerPadding)
+                is UsersScreenEntry -> UsersScreen(modifier = Modifier.padding(innerPadding))
                 is ProjectDetailScreenEntry -> ProjectDetailScreen(
                     projectId = entry.projectId,
                     onBack = { backStack.removeLastOrNull() }
@@ -260,7 +262,7 @@ fun OpenKnightsApp() {
                 is RegisterScreenEntry -> RegisterScreen(
                     onBack = { backStack.removeLastOrNull() },
                     onRegisterSuccess = {
-                        backStack.removeLast() // Remove RegisterScreen
+                        backStack.removeLastOrNull() // Remove RegisterScreen
                         backStack.add(LoginScreenEntry)
                     }
                 )
@@ -269,7 +271,7 @@ fun OpenKnightsApp() {
                     onLoginSuccess = {
                         authViewModel.signIn()
                         backStack.clear()
-                        backStack.add(ContestListScreenEntry)
+                        backStack.add(ContestsScreenEntry)
                     },
                     onNavigateToRegister = { backStack.add(RegisterScreenEntry) }
                 )
@@ -294,21 +296,13 @@ fun DummyScreen(screenName: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ContestListScreen(
-    onContestClick: (Contest) -> Unit,
-    padding: PaddingValues
-) {
-    DummyScreen("ContestListScreen", Modifier.padding(padding))
-}
-
-@Composable
-fun ProjectListScreen(
+fun ProjectsScreen(
     contestTerm: String,
     onProjectClick: (Project) -> Unit,
     onShowErrorSnackBar: () -> Unit,
     padding: PaddingValues
 ) {
-    DummyScreen("ProjectListScreen (Term: $contestTerm)", Modifier.padding(padding))
+    DummyScreen("ProjectsScreen (Term: $contestTerm)", Modifier.padding(padding))
 }
 
 @Composable
@@ -317,11 +311,6 @@ fun ProjectDetailScreen(
     onBack: () -> Unit
 ) {
     DummyScreen("ProjectDetailScreen (ID: $projectId)")
-}
-
-@Composable
-fun UserScreen(padding: PaddingValues) {
-    DummyScreen("UserScreen", Modifier.padding(padding))
 }
 
 @Composable
@@ -382,7 +371,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.openknights.feature.contest.ContestScreen
-import com.openknights.feature.user.UserScreen
+import com.openknights.feature.user.Userscreen
 
 // 하단 네비게이션 아이템을 정의하는 sealed class
 sealed class BottomNavItem(val title: String, val icon: ImageVector, val screenRoute: String) {
@@ -421,7 +410,7 @@ fun OpenKnightsApp() {
         // 선택된 아이템에 따라 다른 화면을 보여줍니다.
         when (selectedItem) {
             is BottomNavItem.User -> {
-                UserScreen(modifier = Modifier.padding(innerPadding))
+                Userscreen(modifier = Modifier.padding(innerPadding))
             }
             is BottomNavItem.Contest -> {
                 ContestScreen(modifier = Modifier.padding(innerPadding))

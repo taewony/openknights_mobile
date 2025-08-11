@@ -1,5 +1,6 @@
 package com.openknights.feature.user
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,12 +29,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.openknights.data.repository.UserRepositoryImpl
 import com.openknights.model.User
 
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+
 @Composable
-fun UserScreen(
+fun UsersScreen(
     modifier: Modifier = Modifier,
     userViewModel: UserViewModel = viewModel(
         factory = UserViewModelFactory(
-            UserRepositoryImpl(LocalContext.current.applicationContext)
+            UserRepositoryImpl(LocalContext.current.applicationContext, Firebase.firestore)
         )
     )
 ) {
@@ -41,19 +45,21 @@ fun UserScreen(
 
     // Automatically load users when the screen is composed
     LaunchedEffect(Unit) {
+        Log.d("UsersScreen", "Automatically load users when the screen is composed")
         userViewModel.loadUsers()
     }
 
-    UserScreenContent(
+    
+    UsersScreenContent(
         modifier = modifier,
         uiState = uiState,
-        onLoadClick = { /* Commented out */ }, // 버튼 클릭 시 로딩
-        onSaveClick = { /* Commented out */ } // Firestore에 저장
+        onLoadClick = { userViewModel.loadUsers() }, // 버튼 클릭 시 로딩
+        onSaveClick = { users -> userViewModel.saveUsersToFirestore(users) } // Firestore에 저장
     )
 }
 
 @Composable
-fun UserScreenContent(
+fun UsersScreenContent(
     modifier: Modifier = Modifier,
     uiState: UserUiState,
     onLoadClick: () -> Unit,
@@ -92,9 +98,7 @@ fun UserScreenContent(
             }
         }
 
-        /*
-        // Commented out: Load and Save buttons
-        // 초기 상태이거나 에러가 발생했을 때만 버튼을 크게 표시
+        /* 초기 상태이거나 에러가 발생했을 때만 버튼을 크게 표시
         if (uiState is UserUiState.Initial || uiState is UserUiState.Error) {
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = onLoadClick, enabled = uiState !is UserUiState.Loading) {
@@ -113,8 +117,7 @@ fun UserScreenContent(
             ) {
                 Text("Save Users to Firestore")
             }
-        }
-        */
+        }*/
     }
 }
 
@@ -141,6 +144,11 @@ fun UserCard(user: User) {
             Text(
                 text = user.name,
                 style = MaterialTheme.typography.headlineSmall
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = user.introduction,
+                style = MaterialTheme.typography.bodyMedium
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(

@@ -49,6 +49,28 @@ class UserViewModel(private val userRepository: UserRepository) : ViewModel() {
         }
     }
 
+    /*
+    fun loadUsers() {
+        viewModelScope.launch {
+            Log.d(TAG, "loadUsers called")
+            _uiState.value = UserUiState.Loading
+            try {
+                val users = userRepository.getUsers()
+                if (users.isNotEmpty()) {
+                    Log.d(TAG, "Users found in repository. Updating UI state to Success with ${users.size} users.")
+                    _uiState.value = UserUiState.Success(users)
+                } else {
+                    Log.w(TAG, "No users found in repository. Updating UI state to Error.")
+                    _uiState.value = UserUiState.Error("No users found")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "An error occurred while loading users.", e)
+                _uiState.value = UserUiState.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
+    */
+
     fun saveUsersToFirestore(users: List<User>) {
         viewModelScope.launch {
             val db = Firebase.firestore
