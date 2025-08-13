@@ -75,6 +75,18 @@ class UserRepositoryImpl(private val context: Context, private val firestore: Fi
         }
     }
 
+    override suspend fun addUserProfile(user: User) {
+        // "users" 컬렉션에 접근하여, 사용자의 고유 ID(uid)를 문서 이름으로 지정하고
+        // user 객체 데이터를 저장합니다.
+        try {
+            firestore.collection("users").document(user.uid).set(user).await()
+        } catch (e: Exception) {
+            // Firestore 저장 실패 시 예외를 던지거나 로그를 남겨서
+            // ViewModel에서 에러를 인지할 수 있도록 합니다.
+            throw e
+        }
+    }
+
     override suspend fun getUserByName(name: String): User? {
         // return _users.find { it.name == name }
         return try {

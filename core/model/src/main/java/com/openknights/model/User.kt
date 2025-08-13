@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 data class User (
     val uid: String = "", // Firebase Auth UID, 기본 식별자
     val studentId: String = "", // 학번,
+    val email: String = "", // 사용자 이메일
     val name: String = "",
     val introduction: String = "",
     val imageUrl: String = "",

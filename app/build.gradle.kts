@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -8,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.openknights.app"
+    namespace = "com.openknights.mobile"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.openknights.app"
+        applicationId = "com.openknights.mobile"
         minSdk = 32
         targetSdk = 36
         versionCode = 1
@@ -63,11 +61,10 @@ dependencies {
 
     implementation(project(":core:designsystem"))
     implementation(project(":feature"))
-    implementation(project(":core:model"))
+    //implementation(project(":core:model"))
 
     // Firebase Integration
-    implementation(platform(libs.firebase.bom)) // BoM 선언
-    implementation(libs.firebase.common) // Firebase 클래스 진입점
+    implementation(platform(libs.firebase.bom)) // Firebase BoM 선언 (최신 버전 유지)
     implementation(libs.firebase.auth)       // Auth API
     implementation(libs.coroutines.play.services) // await() 지원
 

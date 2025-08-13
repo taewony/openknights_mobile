@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -43,11 +44,11 @@ dependencies {
 
     implementation(project(":core:model"))
     implementation(project(":core:data"))
+    implementation(project(":core:ui"))
     implementation(project(":core:designsystem"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -64,8 +65,12 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest) // Changed
     implementation(libs.lifecycle.viewmodel.compose)
 
+    implementation(libs.kotlinx.serialization.json)
     implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)       // Auth API
     implementation(libs.firebase.common) // Firebase 클래스 제공
     implementation(libs.firebase.firestore) // Added Firestore dependency
     implementation(libs.coroutines.play.services)
+
+    implementation(libs.kotlinx.immutable)
 }

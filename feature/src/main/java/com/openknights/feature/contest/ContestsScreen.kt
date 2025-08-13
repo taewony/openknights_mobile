@@ -32,7 +32,7 @@ import com.openknights.model.Contest
 @Composable
 fun ContestsScreen(
     padding: PaddingValues,
-    onContestClick: (Contest) -> Unit,
+    onContestClick: (String) -> Unit,
     viewModel: ContestViewModel = viewModel(
         factory = ContestViewModelFactory(
             // ContestRepositoryImpl(LocalContext.current.applicationContext, Firebase.firestore)
@@ -91,7 +91,7 @@ fun ContestsScreen(
 fun ContestList(
     contests: List<Contest>,
     modifier: Modifier = Modifier,
-    onContestClick: (Contest) -> Unit,
+    onContestClick: (String) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -112,11 +112,11 @@ fun ContestList(
 }
 
 @Composable
-fun ContestCard(contest: Contest, onContestClick: (Contest) -> Unit) {
+fun ContestCard(contest: Contest, onContestClick: (String) -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        onClick = { onContestClick(contest) }
+        onClick = { onContestClick(contest.term) }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(

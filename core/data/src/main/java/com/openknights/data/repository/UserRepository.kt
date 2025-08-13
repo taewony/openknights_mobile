@@ -27,4 +27,6 @@ interface UserRepository {
      */
     // fun getUserByName(name: String): User?
     suspend fun getUserByName(name: String): User?
+
+    suspend fun addUserProfile(user: User)
 }

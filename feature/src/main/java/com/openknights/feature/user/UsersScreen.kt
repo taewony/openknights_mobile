@@ -34,7 +34,7 @@ import com.google.firebase.firestore.firestore
 
 @Composable
 fun UsersScreen(
-    modifier: Modifier = Modifier,
+    padding: PaddingValues,
     userViewModel: UserViewModel = viewModel(
         factory = UserViewModelFactory(
             UserRepositoryImpl(LocalContext.current.applicationContext, Firebase.firestore)
@@ -51,7 +51,7 @@ fun UsersScreen(
 
     
     UsersScreenContent(
-        modifier = modifier,
+        modifier = Modifier.padding(padding),
         uiState = uiState,
         onLoadClick = { userViewModel.loadUsers() }, // 버튼 클릭 시 로딩
         onSaveClick = { users -> userViewModel.saveUsersToFirestore(users) } // Firestore에 저장

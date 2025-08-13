@@ -1,0 +1,74 @@
+
+1) 아래 위치에 fake JSON data들이 저장되어 있음
+D:\code\mobileApp\openknights_mobile\core\data\src\main\res\raw
+
+2) ViewModel 및 UI 연동
+ViewModel은 Repository를 통해 데이터를 요청하며, 데이터가 Firebase에서 왔는지, Fake JSON에서 왔는지는 전혀 신경 쓸 필요가 없다.
+
+3) Repository 구현: 데이터 소스 분기 처리
+Repository는 데이터에 접근하는 로직을 담당합니다. 여기서 Firebase에 먼저 접근해보고, 데이터가 없으면 Fake JSON을 읽어오도록 구현합니다.
+
+아래는 Project Model 예시로 설명한 코드입니다.
+---
+
+```kotlin
+import android.content.Context
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.tasks.await
+import android.util.Log
+import java.io.IOException
+
+class ProjectRepository(private val context: Context) {
+
+    private val db = FirebaseFirestore.getInstance()
+
+    // ViewModel이 호출할 메인 함수
+    suspend fun getProjects(): List<Project> {
+        return try {
+            val snapshot = db.collection("projects").get().await()
+
+            // 💡 핵심 로직: Firestore에서 가져온 결과가 비어있는지 확인
+            if (snapshot.isEmpty) {
+                // 결과가 비어있으면, 로컬 JSON에서 가짜 데이터를 가져온다.
+                getFakeProjectsFromJson()
+            } else {
+                // 결과가 있으면, Firestore 데이터를 파싱하여 반환한다.
+                snapshot.toObjects(Project::class.java)
+            }
+        } catch (e: Exception) {
+            // Firestore 접근 중 네트워크 오류 등이 발생한 경우에도
+            // 가짜 데이터를 반환하여 앱이 비어 보이지 않게 한다.
+            Log.e("ProjectRepository", "Error fetching from Firestore, falling back to fake data.", e)
+            getFakeProjectsFromJson()
+        }
+    }
+
+    // Assets 폴더의 JSON 파일을 읽어와 Project 객체 리스트로 변환하는 함수
+    private fun getFakeProjectsFromJson(): List<Project> {
+        val jsonString: String
+        try {
+            jsonString = context.assets.open("fake_projects.json")
+                .bufferedReader()
+                .use { it.readText() }
+        } catch (ioException: IOException) {
+            ioException.printStackTrace()
+            return emptyList() // JSON 파일 읽기 실패 시 빈 리스트 반환
+        }
+
+        val listProjectType = object : TypeToken<List<Project>>() {}.type
+        return Gson().fromJson(jsonString, listProjectType)
+    }
+}
+```
+
+---
+
+### 설명 요약
+
+* `getProjects()`는 Firestore `projects` 컬렉션에서 데이터를 비동기로 가져옵니다.
+* Firestore에서 데이터가 없거나 오류가 나면, assets 폴더에 있는 `fake_projects.json`을 읽어와 가짜 데이터를 제공합니다.
+* `getFakeProjectsFromJson()`은 JSON 파일을 읽어서 `List<Project>` 객체로 변환합니다.
+* 이렇게 구현하면 네트워크 문제나 Firestore 미설정 상황에서도 앱이 빈 화면이 되지 않고, 안정적으로 테스트할 수 있습니다.
+
