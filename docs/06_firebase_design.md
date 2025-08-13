@@ -1,3 +1,211 @@
+# Firebase 연동 설계
+
+## 1. 소개
+
+이 문서는 OpenKnights 앱에 Firebase를 연동하기 위한 전체적인 설계와 기술 가이드를 제공합니다. Firebase Authentication, Firestore, Storage를 중심으로 각 기능의 구현 단계, 데이터 모델, 보안 규칙 등을 상세히 다룹니다.
+
+---
+
+## 2. Firebase 프로젝트 설정 및 의존성 추가
+
+### 2.1. Firebase 프로젝트 준비
+
+1.  **Firebase 콘솔 설정**:
+    *   Firebase 콘솔에서 새 프로젝트를 생성하고 Android 앱을 추가합니다.
+    *   앱 패키지 이름(`com.openknights.app`)을 등록합니다.
+2.  **`google-services.json` 추가**:
+    *   다운로드한 `google-services.json` 파일을 `openknights/app/` 디렉터리에 배치합니다.
+3.  **Firebase 서비스 활성화**:
+    *   **Authentication**: '이메일/비밀번호' 로그인 공급자를 활성화합니다.
+    *   **Firestore Database**: Firestore 데이터베이스를 생성합니다. (테스트 모드 또는 프로덕션 모드 선택)
+    *   **Storage**: Firebase Storage를 활성화합니다.
+
+### 2.2. Gradle 의존성 설정
+
+`gradle/libs.versions.toml` 파일과 `build.gradle.kts`에 Firebase 관련 라이브러리를 추가합니다.
+
+**`libs.versions.toml`**
+```toml
+[versions]
+firebaseBom = "34.1.0"
+coroutines-play-services = "1.8.1"
+
+[libraries]
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx" }
+firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx" }
+firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx" }
+
+# Task.await() 확장 함수를 사용하기 위한 의존성
+coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutines-play-services" }
+```
+
+**`app/build.gradle.kts`**
+```kotlin
+dependencies {
+    // Firebase BoM (Bill of Materials) - 버전 통합 관리
+    implementation(platform(libs.firebase.bom))
+
+    // 필요한 Firebase SDK 추가
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.storage.ktx)
+
+    // Coroutines 지원 라이브러리
+    implementation(libs.coroutines.play.services)
+}
+```
+
+### 2.3. Firebase 앱 초기화
+
+`Application` 클래스에서 Firebase SDK를 초기화합니다.
+
+**`OpenKnightsApplication.kt`**
+```kotlin
+import com.google.firebase.FirebaseApp
+
+class OpenKnightsApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        FirebaseApp.initializeApp(this)
+    }
+}
+```
+
+**`AndroidManifest.xml`**
+```xml
+<application
+    android:name=".OpenKnightsApplication"
+    ...
+>
+    ...
+</application>
+```
+
+---
+
+## 3. Firebase Authentication: 사용자 인증
+
+### 3.1. 기능 목표
+
+Firebase Authentication을 사용하여 사용자 회원가입, 로그인, 로그아웃 기능을 구현하고, 앱 내비게이션과 통합하여 로그인 상태에 따라 UI를 동적으로 제어합니다.
+
+### 3.2. 구현
+
+*   **`feature:auth` 모듈**: 인증 관련 UI(`RegisterScreen`, `LoginScreen`)와 비즈니스 로직(`AuthViewModel`)을 담당합니다.
+*   **`AuthViewModel`**: `FirebaseAuth.getInstance()`를 통해 인증 인스턴스를 관리하며, 회원가입, 로그인, 로그아웃 함수를 구현합니다. `AuthStateListener`를 통해 로그인 상태 변경을 감지하고 UI에 상태(`isLoggedIn`, `currentUserEmail`)를 제공합니다.
+*   **`app` 모듈 통합**: 앱 시작 시 `isLoggedIn` 상태를 확인하여 로그인 화면 또는 메인 화면으로 안내합니다. 메뉴에서도 로그인 상태에 따라 '로그인' 또는 '로그아웃' 옵션을 동적으로 보여줍니다.
+
+---
+
+## 4. Firebase Firestore: 데이터 관리
+
+### 4.1. 데이터 접근 정책 및 보안 규칙
+
+Firestore의 데이터 접근은 **보안 규칙(Security Rules)**에 의해 제어됩니다. 모든 데이터 요청은 이 규칙의 허가를 받아야 합니다.
+
+**주요 규칙 시나리오:**
+
+1.  **인증된 사용자만 접근 허용 (가장 일반적)**
+    ```rules
+    rules_version = '2';
+    service cloud.firestore {
+      match /databases/{database}/documents {
+        // users 컬렉션: 자신의 문서만 읽고 쓸 수 있음
+        match /users/{userId} {
+          allow read, write: if request.auth != null && request.auth.uid == userId;
+        }
+        // projects, contests 등 다른 컬렉션: 로그인한 모든 사용자가 읽기 가능
+        match /projects/{projectId} {
+          allow read: if request.auth != null;
+          allow write: if false; // 쓰기는 서버나 특정 역할만 가능하도록 제한
+        }
+      }
+    }
+    ```
+    *   `request.auth != null`: 사용자가 로그인 상태인지 확인합니다.
+    *   `request.auth.uid == userId`: 요청자의 UID와 문서의 ID가 일치하는지 확인하여 본인만 접근하도록 제한합니다.
+
+2.  **로그인 없이 일부 데이터 읽기 허용 (Guest Access)**
+    ```rules
+    // 공지사항(notices) 컬렉션은 누구나 읽기 가능
+    match /notices/{noticeId} {
+      allow read: if true;
+      allow write: if false; // 쓰기는 관리자만
+    }
+    ```
+
+**현재 규칙 확인 방법**:
+*   Firebase 콘솔의 **Firestore Database > 규칙(Rules)** 탭에서 직접 확인합니다.
+*   프로젝트 내 `firestore.rules` 파일을 확인합니다.
+
+### 4.2. 사용자 정보 저장 및 조회
+
+**목표**: 회원가입 시 사용자의 프로필 정보를 Firestore `users` 컬렉션에 저장하고, `UserScreen`에서 모든 사용자 목록을 조회하여 표시합니다.
+
+**구현**: 
+
+1.  **`core:model`**: `User` 데이터 클래스에 `uid`, `email`, `name` 등 Firestore에 저장할 필드를 정의합니다.
+2.  **`data:user` 모듈**: `UserRepository`를 구현하여 Firestore와 통신합니다.
+    *   `addUserProfile(user: User)`: 회원가입 성공 후 `AuthViewModel`에서 호출되어 `users` 컬렉션에 사용자 정보를 저장합니다. 문서 ID는 사용자의 `uid`를 사용합니다.
+    *   `getAllUsers(): Flow<List<User>>`: `users` 컬렉션의 모든 문서를 실시간으로 구독(snapshot listener)하거나 한 번만 가져와 `UserScreen`에 제공합니다.
+3.  **`feature:user` 모듈**: `UserViewModel`이 `UserRepository`를 통해 사용자 목록을 가져와 UI에 표시합니다.
+
+### 4.3. 초기 데이터(Fake Data) 저장
+
+개발 및 테스트를 위해 로컬의 JSON 데이터를 Firestore에 직접 저장할 수 있습니다. 디버그 빌드에서만 활성화되는 버튼 등을 통해 이 기능을 구현할 수 있습니다.
+
+**예시 코드 (`ViewModel`)**:
+```kotlin
+fun saveUsersToFirestore(users: List<User>) {
+    val db = Firebase.firestore
+    viewModelScope.launch {
+        users.forEach {
+            try {
+                db.collection("users").document(it.uid).set(it).await()
+            } catch (e: Exception) {
+                // 에러 처리
+            }
+        }
+    }
+}
+```
+
+---
+
+## 5. Firebase Storage: 파일 관리
+
+### 5.1. 기능 목표
+
+Firebase Storage를 사용하여 사용자가 프로필 이미지를 업로드하고, 업로드된 이미지를 다른 사용자들이 볼 수 있도록 다운로드하여 화면에 표시합니다.
+
+### 5.2. 구현
+
+1.  **Storage 보안 규칙 설정**:
+    *   Firebase 콘솔에서 Storage 보안 규칙을 설정하여 인증된 사용자만 자신의 프로필 이미지를 업로드/수정할 수 있도록 제한합니다.
+    ```rules
+    service firebase.storage {
+      match /b/{bucket}/o {
+        // 프로필 이미지: `images/users/{userId}/profile.jpg` 경로
+        match /images/users/{userId}/{fileName} {
+          allow read: if true; // 누구나 프로필 이미지 읽기 가능
+          allow write: if request.auth != null && request.auth.uid == userId;
+        }
+      }
+    }
+    ```
+
+2.  **`data:user` 모듈 (`UserRepository`)**: 
+    *   `uploadProfileImage(userId: String, imageUri: Uri): Flow<String>`: 이미지를 Storage에 업로드하고, 성공 시 다운로드 URL을 반환합니다.
+    *   `updateUserProfileImageUrl(userId: String, imageUrl: String)`: `uploadProfileImage` 성공 후 반환된 URL을 Firestore의 해당 사용자 문서에 업데이트합니다.
+
+3.  **`feature:user` 모듈**: 
+    *   `UserScreen`에서 갤러리 이미지 선택(`ActivityResultLauncher`), 이미지 업로드 요청(`ViewModel` 호출) UI를 구현합니다.
+    *   `User` 객체의 `profileImageUrl` 필드와 이미지 로딩 라이브러리(Coil, Glide 등)를 사용하여 Storage에 저장된 이미지를 화면에 표시합니다.
+
+
+---
+
 # Firebase 연동 설계 문서
 
 ## 1단계: 현재 구조에 안전하게 Firebase 연동하기 (Android 전용)
