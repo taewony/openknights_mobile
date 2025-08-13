@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 // TODO: Hilt를 사용하여 Repository 주입 받도록 변경
-class ProjectListViewModel(private val projectRepository: ProjectRepository) : ViewModel() {
+class ProjectListViewModel(val projectRepository: ProjectRepository) : ViewModel() {
 
     private val _errorFlow = MutableSharedFlow<Throwable>()
     val errorFlow = _errorFlow.asSharedFlow()

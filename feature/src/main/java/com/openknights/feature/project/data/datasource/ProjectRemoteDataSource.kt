@@ -5,7 +5,7 @@ import com.openknights.model.Project
 import kotlinx.coroutines.tasks.await
 
 // TODO: Hilt를 사용하여 FirebaseFirestore 주입 받도록 변경
-class ProjectRemoteDataSource(private val db: FirebaseFirestore) {
+class ProjectRemoteDataSource(val db: FirebaseFirestore) {
 
     suspend fun getProjects(contestTerm: String): List<Project> {
         return db.collection("projects")

@@ -41,7 +41,11 @@ import androidx.navigation3.ui.NavDisplay
 import com.openknights.core.designsystem.theme.KnightsTheme
 import com.openknights.feature.contest.ContestsScreen
 import com.openknights.feature.project.projectdetail.ProjectDetailScreen
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import com.openknights.feature.project.projectlist.ProjectListScreen
+import com.openknights.feature.project.projectlist.ProjectListViewModel
+import com.openknights.feature.project.di.ViewModelFactory
 import com.openknights.feature.user.UsersScreen
 import androidx.compose.ui.platform.LocalContext
 import android.app.Application
@@ -69,10 +73,12 @@ fun OpenKnightsApp() {
     val currentEntry = backStack.lastOrNull()
     val latestContestTerm = "2025-2nd" //FakeOpenKnightsData.fakeContests.firstOrNull()?.term ?: ""
     var showMenu by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
     // viewModel()은 **"화면의 상태 창고를 관리하는 비서"**에게 "AuthViewModel 하나 주세요"라고 요청하는 것.
     // 이미 있으면 그냥 가져다 주고, 없으면 ViewModelProvider를 통해 새 인스턴스 생성한 후 창고에 넣고 그걸 주는 겁니다.
     val authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(LocalContext.current.applicationContext as Application))
+    val projectListViewModel: ProjectListViewModel = viewModel(factory = ViewModelFactory(LocalContext.current))
 
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
     Log.d("OpenKnightsApp", "isLoggedIn: $isLoggedIn")
@@ -142,6 +148,15 @@ fun OpenKnightsApp() {
                                     onClick = {
                                         showMenu = false
                                         // TODO: 프로젝트 등록 화면으로 이동 로직 추가
+                                    }
+                                )
+                                DropdownMenuItem(
+                                    text = { Text("Upload Fake Projects") },
+                                    onClick = {
+                                        showMenu = false
+                                        coroutineScope.launch {
+                                            projectListViewModel.projectRepository.uploadFakeProjectsToFirestore()
+                                        }
                                     }
                                 )
                             }
@@ -233,7 +248,8 @@ fun OpenKnightsApp() {
                     is ProjectDetailScreenEntry -> NavEntry(entry) {
                         ProjectDetailScreen(
                             projectId = entry.projectId,
-                            onBack = { backStack.removeLastOrNull() }
+                            onBack = { backStack.removeLastOrNull() },
+                            padding = innerPadding // Pass innerPadding
                         )
                     }
                     is NoticeScreenEntry -> NavEntry(entry) {

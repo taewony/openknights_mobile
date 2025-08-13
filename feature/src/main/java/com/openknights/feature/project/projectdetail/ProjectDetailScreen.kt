@@ -3,8 +3,10 @@ package com.openknights.feature.project.projectdetail
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -34,11 +36,14 @@ import com.openknights.feature.project.projectdetail.component.ProjectDetailChip
 import com.openknights.feature.project.projectdetail.component.ProjectDetailTopAppBar
 import com.openknights.feature.project.projectdetail.model.ProjectDetailUiState
 
+import androidx.compose.foundation.layout.PaddingValues
+
 // Screen: Project Detail
 @Composable
 fun ProjectDetailScreen(
     projectId: Long,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    padding: PaddingValues
 ){
     val factory = ViewModelFactory(LocalContext.current)
     val viewModel: ProjectDetailViewModel = viewModel(factory = factory)
@@ -50,6 +55,7 @@ fun ProjectDetailScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surfaceDim)
             .systemBarsPadding()
+            .padding(padding) // Apply the passed padding
             .verticalScroll(scrollState),
     ) {
         ProjectDetailTopAppBar(
@@ -101,19 +107,43 @@ private fun ProjectDetailContent(project: Project) {
         }
 
         Spacer(modifier = Modifier.height(40.dp))
-        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
-        Spacer(modifier = Modifier.height(40.dp))
-
-        // TODO: 참여자 정보를 표시하기 위한 데이터 모델 확장이 필요합니다.
-        // 현재 `project.members`는 이름(String) 목록만 포함하고 있습니다.
-        // 참여자의 역할(role)과 상세 정보를 표시하려면 User 모델과 연동된 새로운 데이터 구조가 필요합니다.
-        project.members?.forEach { memberName ->
+        // Leader
+        project.leaderName?.let { leaderName ->
             Text(
-                text = memberName,
+                text = "Leader: $leaderName",
                 style = MaterialTheme.knightsTypography.titleMediumB,
                 color = MaterialTheme.colorScheme.onSecondaryContainer
             )
             Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        // Members
+        project.members?.let { members ->
+            if (members.isNotEmpty()) {
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = "Members:",
+                        style = MaterialTheme.knightsTypography.titleMediumB,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+
+                    members.forEachIndexed { index, memberName ->
+                        Text(
+                            text = memberName,
+                            style = MaterialTheme.knightsTypography.titleMediumB,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+                        if (index < members.size - 1) {
+                            Text(
+                                text = ", ",
+                                style = MaterialTheme.knightsTypography.titleMediumB,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+            }
         }
     }
 }
