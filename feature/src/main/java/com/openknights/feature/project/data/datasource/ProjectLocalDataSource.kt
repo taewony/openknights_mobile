@@ -9,7 +9,7 @@ import java.io.IOException
 // TODO: Hilt를 사용하여 Context 주입 받도록 변경
 class ProjectLocalDataSource(private val context: Context) {
 
-    private val json = Json { ignoreUnknownKeys = true }
+    private val json = Json { ignoreUnknownKeys = true; coerceInputValues = true }
 
     fun getFakeProjects(): List<Project> {
         return try {

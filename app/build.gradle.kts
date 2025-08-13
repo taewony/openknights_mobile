@@ -67,6 +67,8 @@ dependencies {
     implementation(platform(libs.firebase.bom)) // Firebase BoM 선언 (최신 버전 유지)
     implementation(libs.firebase.auth)       // Auth API
     implementation(libs.coroutines.play.services) // await() 지원
+    // 필요한 Firebase 라이브러리들
+    implementation("com.google.firebase:firebase-analytics")
 
     // --- Navigation 의존성 ---
     implementation(libs.androidx.navigation3.runtime)

@@ -43,6 +43,9 @@ import com.openknights.feature.contest.ContestsScreen
 import com.openknights.feature.project.projectdetail.ProjectDetailScreen
 import com.openknights.feature.project.projectlist.ProjectListScreen
 import com.openknights.feature.user.UsersScreen
+import androidx.compose.ui.platform.LocalContext
+import android.app.Application
+import com.openknights.feature.auth.AuthViewModelFactory
 import com.openknights.feature.auth.AuthViewModel
 import com.openknights.feature.auth.LoginScreen
 import com.openknights.feature.auth.RegisterScreen
@@ -69,7 +72,7 @@ fun OpenKnightsApp() {
 
     // viewModel()은 **"화면의 상태 창고를 관리하는 비서"**에게 "AuthViewModel 하나 주세요"라고 요청하는 것.
     // 이미 있으면 그냥 가져다 주고, 없으면 ViewModelProvider를 통해 새 인스턴스 생성한 후 창고에 넣고 그걸 주는 겁니다.
-    val authViewModel: AuthViewModel = viewModel()
+    val authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(LocalContext.current.applicationContext as Application))
 
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
     Log.d("OpenKnightsApp", "isLoggedIn: $isLoggedIn")
