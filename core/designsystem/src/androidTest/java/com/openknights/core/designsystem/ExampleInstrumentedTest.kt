@@ -1,4 +1,4 @@
-package com.openknights.core.designsystem
+package com.openknights.designsystem
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.openknights.core.designsystem.test", appContext.packageName)
+        assertEquals("com.openknights.designsystem.test", appContext.packageName)
     }
 }

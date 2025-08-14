@@ -26,9 +26,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import com.openknights.core.designsystem.theme.KnightsColor
-import com.openknights.core.designsystem.theme.KnightsTheme
-import com.openknights.core.designsystem.theme.knightsTypography
+import com.openknights.designsystem.theme.KnightsColor
+import com.openknights.designsystem.theme.KnightsTheme
+import com.openknights.designsystem.theme.knightsTypography
 import com.openknights.model.Project
 import com.openknights.model.Phase
 import com.openknights.ui.KnightsCard

@@ -1,11 +1,11 @@
-package com.openknights.core.designsystem.typography
+package com.openknights.designsystem.typography
 
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import androidx.compose.runtime.compositionLocalOf
-
 // Define a data class to hold all custom typography styles
 /**
  * `KnightsTypography`는 앱의 모든 커스텀 텍스트 스타일을 정의하는 데이터 클래스입니다.

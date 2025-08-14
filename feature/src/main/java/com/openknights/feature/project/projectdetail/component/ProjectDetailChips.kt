@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.MaterialTheme
 import com.openknights.ui.OutlineChip
-import com.openknights.core.designsystem.theme.KnightsTheme
+import com.openknights.designsystem.theme.KnightsTheme
 import com.openknights.model.Project
 
 @Composable

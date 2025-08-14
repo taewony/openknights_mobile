@@ -1,4 +1,4 @@
-package com.openknights.core.designsystem.theme
+package com.openknights.designsystem.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,11 +12,11 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.openknights.core.designsystem.color.KnightsColor
-import com.openknights.core.designsystem.shape.KnightsShape
-import com.openknights.core.designsystem.typography.KnightsTypography
-import com.openknights.core.designsystem.typography.LocalTypography
-import com.openknights.core.designsystem.typography.Material3Typography
+import com.openknights.designsystem.color.KnightsColor
+import com.openknights.designsystem.shape.KnightsShape
+import com.openknights.designsystem.typography.KnightsTypography
+import com.openknights.designsystem.typography.LocalTypography
+import com.openknights.designsystem.typography.Material3Typography
 
 /**
  * `MaterialTheme`의 확장 프로퍼티로, 커스텀 정의된 `KnightsTypography`에 접근할 수 있도록 합니다.

@@ -5,15 +5,15 @@
 ## ✅ 1. 전체 보완된 코드
 
 ```kotlin
-package com.openknights.mobile.core.designsystem.theme
+package com.openknights.mobile.designsystem.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
-import com.openknights.app.core.designsystem.color.KnightsColor
-import com.openknights.app.core.designsystem.shape.KnightsShape
-import com.openknights.app.core.designsystem.typography.KnightsTypography
+import com.openknights.designsystem.color.KnightsColor
+import com.openknights.designsystem.shape.KnightsShape
+import com.openknights.designsystem.typography.KnightsTypography
 
 // Dark ColorScheme (Material 3 기반)
 private val DarkColorScheme = darkColorScheme(

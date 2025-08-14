@@ -41,8 +41,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.openknights.ui.KnightsTopAppBar
 import com.openknights.ui.TopAppBarNavigationType
-import com.openknights.core.designsystem.theme.KnightsTheme
-import com.openknights.core.designsystem.theme.knightsTypography
+import com.openknights.designsystem.theme.KnightsTheme
+import com.openknights.designsystem.theme.knightsTypography
 import com.openknights.model.Phase
 import com.openknights.feature.project.projectlist.model.ProjectState
 import com.openknights.feature.R

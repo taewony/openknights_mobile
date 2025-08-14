@@ -38,7 +38,7 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
 
 // B. 이전 버전과 동일하게 화면 Entry 정의 추가
-import com.openknights.core.designsystem.theme.KnightsTheme
+import com.openknights.designsystem.theme.KnightsTheme
 import com.openknights.feature.contest.ContestsScreen
 import com.openknights.feature.project.projectdetail.ProjectDetailScreen
 import androidx.compose.runtime.rememberCoroutineScope

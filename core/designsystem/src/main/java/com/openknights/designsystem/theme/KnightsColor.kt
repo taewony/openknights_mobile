@@ -1,4 +1,4 @@
-package com.openknights.core.designsystem.theme
+package com.openknights.designsystem.theme
 
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color

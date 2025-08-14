@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.openknights.ui.KnightsTopAppBar
 import com.openknights.ui.TopAppBarNavigationType
-import com.openknights.core.designsystem.theme.KnightsTheme
+import com.openknights.designsystem.theme.KnightsTheme
 import com.openknights.feature.R
 
 import androidx.compose.ui.res.stringResource

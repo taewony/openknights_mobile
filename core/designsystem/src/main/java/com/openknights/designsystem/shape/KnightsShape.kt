@@ -1,4 +1,4 @@
-package com.openknights.core.designsystem.shape
+package com.openknights.designsystem.shape
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes

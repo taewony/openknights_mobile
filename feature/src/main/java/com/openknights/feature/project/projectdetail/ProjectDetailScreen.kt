@@ -27,8 +27,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.openknights.core.designsystem.theme.KnightsTheme
-import com.openknights.core.designsystem.theme.knightsTypography
+import com.openknights.designsystem.theme.KnightsTheme
+import com.openknights.designsystem.theme.knightsTypography
 import com.openknights.model.Project
 import com.openknights.feature.R
 import com.openknights.feature.project.di.ViewModelFactory

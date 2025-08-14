@@ -15,8 +15,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.openknights.core.designsystem.theme.KnightsTheme
-import com.openknights.core.designsystem.theme.knightsTypography
+import com.openknights.designsystem.theme.KnightsTheme
+import com.openknights.designsystem.theme.knightsTypography
 import com.openknights.model.Role
 import com.openknights.model.User
 import com.openknights.ui.NetworkImage

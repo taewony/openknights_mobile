@@ -1,4 +1,4 @@
-package com.openknights.core.designsystem.color
+package com.openknights.designsystem.color
 
 import androidx.compose.ui.graphics.Color
 

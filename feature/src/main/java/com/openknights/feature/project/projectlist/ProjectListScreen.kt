@@ -30,7 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.platform.LocalContext
 import com.openknights.feature.project.projectlist.component.ProjectCard
 import com.openknights.feature.project.projectlist.component.ProjectListTopAppBar
-import com.openknights.core.designsystem.theme.knightsTypography
+import com.openknights.designsystem.theme.knightsTypography
 import com.openknights.feature.project.di.ViewModelFactory
 import com.openknights.feature.project.projectlist.model.ProjectUiState
 import com.openknights.feature.project.projectlist.model.rememberProjectState
