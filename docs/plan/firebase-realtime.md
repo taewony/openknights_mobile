@@ -406,3 +406,10 @@ fun fetchAnnouncements() {
 ---
 
 👉 지금 단계에서는 **Firebase Console → Data 탭 → JSON 붙여넣기 → 앱에서 ValueEventListener로 조회** 까지만 확인하면 충분합니다.
+
+git add . && git commit -m "feat: complete realtime DB feature"
+git checkout main
+git pull origin main
+git merge firebase-realtime
+git push origin main
+git push origin firebase-realtime

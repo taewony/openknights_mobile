@@ -95,7 +95,7 @@
 		  
 ## 3. feature 브랜치를 main에 merge
 ```
-git branch main
+git checkout main
 git merge firebase-storage
 ```
 
