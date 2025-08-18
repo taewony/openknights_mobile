@@ -93,22 +93,9 @@
    1         adb push [PC의 이미지 파일 경로] /sdcard/DCIM/Camera/
           예시: adb push C:\Users\YourUser\Pictures\my_test_photo.jpg /sdcard/DCIM/Camera/
 		  
-## 3. 브랜치 병합 및 푸시
+## 3. 
 
-1.  **`main` 브랜치로 이동**:
-    ```bash
-    git checkout main
-    ```
-2.  **`firebase-storage` 브랜치 병합**: 개발이 완료된 `firebase-storage` 브랜치의 변경 사항을 `main` 브랜치로 병합합니다.
-    ```bash
-    git merge firebase-storage
-    ```
-3.  **원격 저장소에 푸시**: `main`, `firebase-store`, `firebase-storage` 브랜치를 GitHub에 푸시하여 작업을 완료하고 공유합니다.
-    ```bash
-    git push origin main
-    git push origin firebase-store
-    git push origin firebase-storage
-    ```
+
 
 ## 4. 로컬 및 원격 브랜치 확인 및 동기화
 

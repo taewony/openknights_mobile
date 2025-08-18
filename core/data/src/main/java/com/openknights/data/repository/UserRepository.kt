@@ -29,4 +29,13 @@ interface UserRepository {
     suspend fun getUserByName(name: String): User?
 
     suspend fun addUserProfile(user: User)
+
+    /**
+     * 사용자 프로필 정보를 업데이트합니다.
+     * @param userId 업데이트할 사용자의 ID
+     * @param name 업데이트할 이름
+     * @param description 업데이트할 소개
+     * @param profileImageUrl 업데이트할 프로필 이미지 URL
+     */
+    suspend fun updateUserProfile(userId: String, name: String, description: String, profileImageUrl: String)
 }

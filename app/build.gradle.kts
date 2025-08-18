@@ -61,11 +61,13 @@ dependencies {
 
     implementation(project(":core:designsystem"))
     implementation(project(":feature"))
-    //implementation(project(":core:model"))
+    implementation(project(":core:data"))
 
     // Firebase Integration
     implementation(platform(libs.firebase.bom)) // Firebase BoM 선언 (최신 버전 유지)
     implementation(libs.firebase.auth)       // Auth API
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.storage)
     implementation(libs.coroutines.play.services) // await() 지원
     // 필요한 Firebase 라이브러리들
     implementation("com.google.firebase:firebase-analytics")

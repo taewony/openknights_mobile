@@ -56,6 +56,12 @@ import com.openknights.feature.auth.RegisterScreen
 import com.openknights.feature.notice.NoticeScreen
 import androidx.compose.foundation.layout.padding
 import com.openknights.feature.profile.ProfileEditScreen
+import com.openknights.feature.user.UserViewModel
+import com.openknights.feature.user.UserViewModelFactory
+import com.openknights.data.repository.UserRepositoryImpl
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import android.content.Context
 
 
 // --- Navigation 대상 정의
@@ -82,6 +88,12 @@ fun OpenKnightsApp() {
     // 이미 있으면 그냥 가져다 주고, 없으면 ViewModelProvider를 통해 새 인스턴스 생성한 후 창고에 넣고 그걸 주는 겁니다.
     val authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(LocalContext.current.applicationContext as Application))
     val projectListViewModel: ProjectListViewModel = viewModel(factory = ViewModelFactory(LocalContext.current))
+
+    val context = LocalContext.current.applicationContext
+    val firestore = FirebaseFirestore.getInstance()
+    val storage = FirebaseStorage.getInstance()
+    val userRepository = UserRepositoryImpl(context, firestore, storage)
+    val userViewModel: UserViewModel = viewModel(factory = UserViewModelFactory(userRepository))
 
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
     Log.d("OpenKnightsApp", "isLoggedIn: $isLoggedIn")
@@ -264,14 +276,15 @@ fun OpenKnightsApp() {
                         ProfileEditScreen(
                             userId = entry.userId,
                             onSaveClick = { name, description, profileImageUrl ->
-                                // TODO: Implement actual save logic here
-                                Log.d("ProfileEditScreen", "Name: $name, Description: $description, Image URL: $profileImageUrl")
+                                Log.d("ProfileEditScreen ${entry.userId}", "Name: $name, Description: $description, Image URL: $profileImageUrl")
+                                userViewModel.updateUserProfile(entry.userId, name, description, profileImageUrl)
+                                backStack.removeLastOrNull() // Go back after saving
                             },
                             onBackClick = { backStack.removeLastOrNull() }
                         )
                     }
                     is NoticeScreenEntry -> NavEntry(entry) {
-                        val currentUserEmail by authVi기ewModel.currentUserEmail.collectAsState()
+                        val currentUserEmail by authViewModel.currentUserEmail.collectAsState()
                         NoticeScreen(
                             userEmail = currentUserEmail,
                             isLoggedIn = entry.isLoggedIn,
@@ -316,74 +329,3 @@ fun OpenKnightsAppPreview() {
         OpenKnightsApp()
     }
 }
-/*
-package com.openknights.app
-
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import com.openknights.feature.contest.ContestScreen
-import com.openknights.feature.user.Userscreen
-
-// 하단 네비게이션 아이템을 정의하는 sealed class
-sealed class BottomNavItem(val title: String, val icon: ImageVector, val screenRoute: String) {
-    object User : BottomNavItem("User", Icons.Filled.Person, "USER")
-    object Contest : BottomNavItem("Contest", Icons.Filled.Home, "CONTEST")
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun OpenKnightsApp() {
-    var selectedItem by remember { mutableStateOf<BottomNavItem>(BottomNavItem.User) }
-
-    val navigationItems = listOf(
-        BottomNavItem.User,
-        BottomNavItem.Contest
-    )
-
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text(text = "OpenKnights") })
-        },
-        bottomBar = {
-            NavigationBar {
-                navigationItems.forEach { item ->
-                    NavigationBarItem(
-                        selected = selectedItem == item,
-                        onClick = { selectedItem = item },
-                        icon = { Icon(item.icon, contentDescription = item.title) },
-                        label = { Text(item.title) }
-                    )
-                }
-            }
-        }
-    ) { innerPadding ->
-        // Scaffold의 content 영역
-        // 선택된 아이템에 따라 다른 화면을 보여줍니다.
-        when (selectedItem) {
-            is BottomNavItem.User -> {
-                Userscreen(modifier = Modifier.padding(innerPadding))
-            }
-            is BottomNavItem.Contest -> {
-                ContestScreen(modifier = Modifier.padding(innerPadding))
-            }
-        }
-    }
-}
-
- */

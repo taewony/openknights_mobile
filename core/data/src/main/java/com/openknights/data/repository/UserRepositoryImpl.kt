@@ -140,4 +140,20 @@ class UserRepositoryImpl(private val context: Context, private val firestore: Fi
         }
     }
     */
+
+    override suspend fun updateUserProfile(userId: String, name: String, description: String, profileImageUrl: String) {
+        try {
+            val userRef = firestore.collection("users").document(userId)
+            val updates = hashMapOf<String, Any>(
+                "name" to name,
+                "introduction" to description,
+                "imageUrl" to profileImageUrl
+            )
+            userRef.update(updates).await()
+            Log.d(TAG, "User profile for $userId updated successfully.")
+        } catch (e: Exception) {
+            Log.e(TAG, "Error updating user profile for $userId: ${e.message}", e)
+            throw e
+        }
+    }
 }

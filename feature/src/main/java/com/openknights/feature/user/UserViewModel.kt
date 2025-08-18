@@ -58,6 +58,20 @@ class UserViewModel(private val userRepository: UserRepository) : ViewModel() {
         }
     }
 
+    fun updateUserProfile(userId: String, name: String, description: String, profileImageUrl: String) {
+        viewModelScope.launch {
+            try {
+                userRepository.updateUserProfile(userId, name, description, profileImageUrl)
+                Log.d(TAG, "User profile updated successfully in ViewModel.")
+                // Optionally, you might want to refresh the UI state after update
+                // For example, if the current user's profile was updated, you might want to reload it.
+            } catch (e: Exception) {
+                Log.e(TAG, "Error updating user profile in ViewModel: ${e.message}", e)
+                // Handle error, e.g., update UI state to show error message
+            }
+        }
+    }
+
     fun saveUsersToFirestore(users: List<User>) {
         viewModelScope.launch {
             val db = Firebase.firestore

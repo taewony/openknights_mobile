@@ -161,33 +161,3 @@ private fun ProjectOverview(content: String) {
         )
     }
 }
-
-// TODO: Preview를 다시 활성화하려면 Fake 데이터를 대체할 Mock 데이터나 다른 방식이 필요합니다.
-/*
-@Preview
-@Composable
-private fun ProjectDetailContentPreview(
-    @PreviewParameter(ProjectDetailContentProvider::class) project: Project,
-) {
-    KnightsTheme {
-        ProjectDetailContent(project = project)
-    }
-}
-
-@Preview
-@Composable
-private fun ProjectDetailSpeakerPreview() {
-    KnightsTheme {
-        val user = FakeUsers.users.first()
-        ProjectDetailSpeaker(user = user, role = ProjectRole.TEAM_LEADER)
-    }
-}
-
-@Preview
-@Composable
-private fun ProjectOverviewPreview() {
-    KnightsTheme {
-        ProjectOverview(FakeOpenKnightsData.fakeProjects.first().description ?: "")
-    }
-}
-*/
