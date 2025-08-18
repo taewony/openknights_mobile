@@ -50,5 +50,6 @@ dependencies {
     implementation(platform(libs.firebase.bom)) // Firebase 버전 통합 관리
     implementation(libs.firebase.common) // Firebase 진입점(Firebase.*)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.storage)   // Storage API
     implementation(libs.coroutines.play.services) // await() 지원
 }

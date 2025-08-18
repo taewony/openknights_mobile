@@ -16,13 +16,14 @@ import com.openknights.data.repository.UserRepositoryImpl
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 
 class AuthViewModel(application: Application, private val auth: FirebaseAuth) : AndroidViewModel(application) {
 
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-    // 생성자에 application(Context)과 firestore(FirebaseFirestore)를 모두 전달합니다.
-    private val userRepository: UserRepository = UserRepositoryImpl(application, firestore)
+    private val storage: FirebaseStorage = FirebaseStorage.getInstance()
+    private val userRepository: UserRepository = UserRepositoryImpl(application, firestore, storage)
 
 
 
@@ -43,6 +44,11 @@ class AuthViewModel(application: Application, private val auth: FirebaseAuth) : 
             Log.d("AuthViewModel", "Auth state changed: isLoggedIn = $loggedIn, currentUser = ${it.currentUser?.email}")
         }
         Log.d("AuthViewModel", "Initial auth state: isLoggedIn = ${_isLoggedIn.value}, currentUser = ${auth.currentUser?.email}")
+
+        // Firebase Storage 접근 테스트 (임시 코드)
+        // viewModelScope.launch {
+        //     userRepository.testStorageAccess()
+        // }
     }
 
     override fun onCleared() {
@@ -64,7 +70,7 @@ class AuthViewModel(application: Application, private val auth: FirebaseAuth) : 
                 val firebaseUser = authResult.user ?: throw IllegalStateException("Firebase user not found.")
 
                 // 2. DB에 프로필 저장이 끝날 때까지 대기
-                val user = User(uid = firebaseUser.uid, email = firebaseUser.email ?: "", name = firebaseUser.displayName ?: "User")
+                                val user = User(uid = firebaseUser.uid, email = firebaseUser.email ?: "", name = firebaseUser.email?.split('@')?.firstOrNull() ?: "")
                 userRepository.addUserProfile(user)
 
                 // 3. 모든 작업이 성공하면 UI 상태를 '성공'으로 변경
@@ -73,7 +79,12 @@ class AuthViewModel(application: Application, private val auth: FirebaseAuth) : 
 
             } catch (e: Exception) {
                 // 4. 인증, DB 작업 등 모든 단계의 에러를 한 곳에서 처리
-                _uiState.value = AuthUiState(isLoading = false, error = e.message ?: "An unknown error occurred.")
+                val errorMessage = if (e is com.google.firebase.auth.FirebaseAuthUserCollisionException) {
+                    "이미 사용 중인 이메일입니다. 다른 이메일을 사용하거나 로그인해주세요."
+                } else {
+                    e.message ?: "알 수 없는 오류가 발생했습니다."
+                }
+                _uiState.value = AuthUiState(isLoading = false, error = errorMessage)
                 Log.e("AuthViewModel", "Registration failed", e)
             }
         }

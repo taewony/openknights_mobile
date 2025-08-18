@@ -54,6 +54,8 @@ import com.openknights.feature.auth.AuthViewModel
 import com.openknights.feature.auth.LoginScreen
 import com.openknights.feature.auth.RegisterScreen
 import com.openknights.feature.notice.NoticeScreen
+import androidx.compose.foundation.layout.padding
+import com.openknights.feature.profile.ProfileEditScreen
 
 
 // --- Navigation 대상 정의
@@ -62,6 +64,7 @@ data object ContestsScreenEntry : ScreenEntry
 data class ProjectsScreenEntry(val term: String) : ScreenEntry
 data class ProjectDetailScreenEntry(val projectId: Long) : ScreenEntry
 data object UsersScreenEntry : ScreenEntry
+data class ProfileEditScreenEntry(val userId: String) : ScreenEntry // 프로필 수정 화면 Entry 추가
 data class NoticeScreenEntry(val isLoggedIn: Boolean) : ScreenEntry
 data object RegisterScreenEntry : ScreenEntry
 data object LoginScreenEntry : ScreenEntry
@@ -243,7 +246,12 @@ fun OpenKnightsApp() {
                         )
                     }
                     is UsersScreenEntry -> NavEntry(entry) {
-                        UsersScreen(padding = innerPadding)
+                        UsersScreen(
+                            padding = innerPadding,
+                            onUserClick = { userId ->
+                                backStack.add(ProfileEditScreenEntry(userId))
+                            }
+                        )
                     }
                     is ProjectDetailScreenEntry -> NavEntry(entry) {
                         ProjectDetailScreen(
@@ -252,8 +260,18 @@ fun OpenKnightsApp() {
                             padding = innerPadding // Pass innerPadding
                         )
                     }
+                    is ProfileEditScreenEntry -> NavEntry(entry) {
+                        ProfileEditScreen(
+                            userId = entry.userId,
+                            onSaveClick = { name, description, profileImageUrl ->
+                                // TODO: Implement actual save logic here
+                                Log.d("ProfileEditScreen", "Name: $name, Description: $description, Image URL: $profileImageUrl")
+                            },
+                            onBackClick = { backStack.removeLastOrNull() }
+                        )
+                    }
                     is NoticeScreenEntry -> NavEntry(entry) {
-                        val currentUserEmail by authViewModel.currentUserEmail.collectAsState()
+                        val currentUserEmail by authVi기ewModel.currentUserEmail.collectAsState()
                         NoticeScreen(
                             userEmail = currentUserEmail,
                             isLoggedIn = entry.isLoggedIn,

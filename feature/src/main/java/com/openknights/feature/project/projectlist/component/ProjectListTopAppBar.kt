@@ -44,14 +44,12 @@ import com.openknights.ui.TopAppBarNavigationType
 import com.openknights.designsystem.theme.KnightsTheme
 import com.openknights.designsystem.theme.knightsTypography
 import com.openknights.model.Phase
-import com.openknights.feature.project.projectlist.model.ProjectState
-import com.openknights.feature.R
+import com.openknights.feature.project.projectlist.uistate.ProjectState
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
-import androidx.compose.ui.res.stringResource
 import kotlin.collections.forEachIndexed
 import kotlin.collections.isNotEmpty
 import kotlin.collections.map

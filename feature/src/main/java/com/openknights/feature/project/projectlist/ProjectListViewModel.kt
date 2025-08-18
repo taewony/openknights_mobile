@@ -3,7 +3,7 @@ package com.openknights.feature.project.projectlist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.openknights.feature.project.data.repository.ProjectRepository
-import com.openknights.feature.project.projectlist.model.ProjectUiState
+import com.openknights.feature.project.projectlist.uistate.ProjectUiState
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

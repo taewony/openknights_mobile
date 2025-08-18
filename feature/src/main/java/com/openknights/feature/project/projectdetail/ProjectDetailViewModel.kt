@@ -3,7 +3,7 @@ package com.openknights.feature.project.projectdetail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.openknights.feature.project.data.repository.ProjectRepository
-import com.openknights.feature.project.projectdetail.model.ProjectDetailUiState
+import com.openknights.feature.project.projectdetail.uistate.ProjectDetailUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch

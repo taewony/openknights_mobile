@@ -32,8 +32,8 @@ import com.openknights.feature.project.projectlist.component.ProjectCard
 import com.openknights.feature.project.projectlist.component.ProjectListTopAppBar
 import com.openknights.designsystem.theme.knightsTypography
 import com.openknights.feature.project.di.ViewModelFactory
-import com.openknights.feature.project.projectlist.model.ProjectUiState
-import com.openknights.feature.project.projectlist.model.rememberProjectState
+import com.openknights.feature.project.projectlist.uistate.ProjectUiState
+import com.openknights.feature.project.projectlist.uistate.rememberProjectState
 import com.openknights.model.Phase
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.collections.immutable.toPersistentList

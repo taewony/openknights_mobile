@@ -1,4 +1,4 @@
-package com.openknights.feature.project.projectdetail.model
+package com.openknights.feature.project.projectdetail.uistate
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable

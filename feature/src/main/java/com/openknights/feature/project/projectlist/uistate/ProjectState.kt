@@ -1,4 +1,4 @@
-package com.openknights.feature.project.projectlist.model
+package com.openknights.feature.project.projectlist.uistate
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState

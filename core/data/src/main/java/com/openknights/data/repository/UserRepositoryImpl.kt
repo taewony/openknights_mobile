@@ -3,6 +3,8 @@ package com.openknights.data.repository
 import android.content.Context
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.openknights.data.R
 import com.openknights.model.User
 import kotlinx.coroutines.tasks.await
@@ -16,7 +18,7 @@ private const val TAG = "UserRepository"
  *
  * @property context 리소스에 접근하기 위한 Application Context
  */
-class UserRepositoryImpl(private val context: Context, private val firestore: FirebaseFirestore) : UserRepository {
+class UserRepositoryImpl(private val context: Context, private val firestore: FirebaseFirestore, private val storage: FirebaseStorage) : UserRepository {
 
     /*
     // JSON 파일을 읽어 파싱한 사용자 목록을 저장하는 변수
@@ -106,4 +108,36 @@ class UserRepositoryImpl(private val context: Context, private val firestore: Fi
             null
         }
     }
+
+    /*
+    override suspend fun testStorageAccess() {
+        val testFilePath = "test_uploads/test_file_${System.currentTimeMillis()}.txt"
+        val testContent = "Hello Firebase Storage Test!"
+        val storageRef = storage.reference.child(testFilePath)
+
+        try {
+            // Upload test file
+            storageRef.putBytes(testContent.toByteArray()).await()
+            Log.d(TAG, "Storage Test: File uploaded successfully to $testFilePath")
+
+            // Download test file
+            val bytes = storageRef.getBytes(1024 * 1024).await() // Max 1MB
+            val downloadedContent = String(bytes)
+            Log.d(TAG, "Storage Test: File downloaded successfully. Content: $downloadedContent")
+
+            if (downloadedContent == testContent) {
+                Log.d(TAG, "Storage Test: Upload and download content match. Spark Plan access confirmed!")
+            } else {
+                Log.e(TAG, "Storage Test: Downloaded content mismatch.")
+            }
+
+            // Clean up: Delete the test file
+            storageRef.delete().await()
+            Log.d(TAG, "Storage Test: Test file deleted successfully.")
+
+        } catch (e: Exception) {
+            Log.e(TAG, "Storage Test: Failed to access Firebase Storage.", e)
+        }
+    }
+    */
 }
