@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.firebase.auth)       // Auth API
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
+    implementation(libs.firebase.database)  // Firebase Realtime Database 클라이언트 SDK
     implementation(libs.coroutines.play.services) // await() 지원
     // 필요한 Firebase 라이브러리들
     implementation("com.google.firebase:firebase-analytics")

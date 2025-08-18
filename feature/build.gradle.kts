@@ -71,7 +71,10 @@ dependencies {
     implementation(libs.firebase.storage)   // Storage API
     implementation(libs.firebase.common) // Firebase 클래스 제공
     implementation(libs.firebase.firestore) // Added Firestore dependency
-    implementation(libs.coroutines.play.services)
+    implementation(libs.firebase.messaging) // Added Messaging dependency
+    implementation(libs.firebase.database)  // Firebase Realtime Database 클라이언트 SDK
+    implementation(libs.coroutines.play.services) // 코루틴: Firebase Task → suspend 함수 변환 지원
+
 
     implementation(libs.kotlinx.immutable)
     implementation(libs.coil) // for AsyncImage

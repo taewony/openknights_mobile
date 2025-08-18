@@ -53,6 +53,7 @@ firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore
 firebase-common = { group = "com.google.firebase", name = "firebase-common" }
 firebase-storage = { module = "com.google.firebase:firebase-storage" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database" }
 
 coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines-play-services" }
 

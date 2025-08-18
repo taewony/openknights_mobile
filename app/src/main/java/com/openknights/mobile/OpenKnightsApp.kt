@@ -284,17 +284,17 @@ fun OpenKnightsApp() {
                         )
                     }
                     is NoticeScreenEntry -> NavEntry(entry) {
-                        val currentUserEmail by authViewModel.currentUserEmail.collectAsState()
-                        NoticeScreen(
-                            userEmail = currentUserEmail,
-                            isLoggedIn = entry.isLoggedIn,
-                            onLogoutClick = {
-                                authViewModel.signOut()
-                                backStack.clear()
-                                backStack.add(LoginScreenEntry)
-                            },
-                            onBack = { backStack.removeLastOrNull() }
-                        )
+                        val currentUserId: String? by authViewModel.currentUserUid.collectAsState()
+                        val userIdValue = currentUserId
+                        if (userIdValue != null) {
+                            NoticeScreen(
+                                padding = innerPadding,
+                                currentUserId = userIdValue)
+                        } else {
+                            // Handle case where user is not logged in or UID is null
+                            // Maybe navigate back to login or show a loading indicator
+                            Text("사용자 정보를 불러오는 중...")
+                        }
                     }
                     is RegisterScreenEntry -> NavEntry(entry) {
                         RegisterScreen(

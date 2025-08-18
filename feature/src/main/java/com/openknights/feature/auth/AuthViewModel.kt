@@ -17,13 +17,19 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.database.FirebaseDatabase // Added import
 import kotlinx.coroutines.tasks.await
 
-class AuthViewModel(application: Application, private val auth: FirebaseAuth) : AndroidViewModel(application) {
+class AuthViewModel(
+    application: Application,
+    private val auth: FirebaseAuth,
+    private val database: FirebaseDatabase // Added parameter
+) : AndroidViewModel(application) {
 
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val storage: FirebaseStorage = FirebaseStorage.getInstance()
     private val userRepository: UserRepository = UserRepositoryImpl(application, firestore, storage)
+    private val userStateRef = database.getReference("user_state") // Added property
 
 
 
@@ -36,11 +42,15 @@ class AuthViewModel(application: Application, private val auth: FirebaseAuth) : 
     private val _currentUserEmail = MutableStateFlow<String?>(null)
     val currentUserEmail: StateFlow<String?> = _currentUserEmail
 
+    private val _currentUserUid = MutableStateFlow<String?>(null)
+    val currentUserUid: StateFlow<String?> = _currentUserUid
+
     init {
         auth.addAuthStateListener {
             val loggedIn = it.currentUser != null
             _isLoggedIn.value = loggedIn
             _currentUserEmail.value = it.currentUser?.email
+            _currentUserUid.value = it.currentUser?.uid
             Log.d("AuthViewModel", "Auth state changed: isLoggedIn = $loggedIn, currentUser = ${it.currentUser?.email}")
         }
         Log.d("AuthViewModel", "Initial auth state: isLoggedIn = ${_isLoggedIn.value}, currentUser = ${auth.currentUser?.email}")
@@ -72,6 +82,9 @@ class AuthViewModel(application: Application, private val auth: FirebaseAuth) : 
                 // 2. DB에 프로필 저장이 끝날 때까지 대기
                                 val user = User(uid = firebaseUser.uid, email = firebaseUser.email ?: "", name = firebaseUser.email?.split('@')?.firstOrNull() ?: "")
                 userRepository.addUserProfile(user)
+
+                // Initialize user_state/uid/unreadCount
+                userStateRef.child(firebaseUser.uid).child("unreadCount").setValue(0).await() // Added line
 
                 // 3. 모든 작업이 성공하면 UI 상태를 '성공'으로 변경
                 _uiState.value = AuthUiState(isLoading = false, success = true)

@@ -52,4 +52,5 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)   // Storage API
     implementation(libs.coroutines.play.services) // await() 지원
+    implementation(libs.firebase.database)  // Firebase Realtime Database 클라이언트 SDK
 }
