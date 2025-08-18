@@ -93,8 +93,11 @@
    1         adb push [PC의 이미지 파일 경로] /sdcard/DCIM/Camera/
           예시: adb push C:\Users\YourUser\Pictures\my_test_photo.jpg /sdcard/DCIM/Camera/
 		  
-## 3. 
-
+## 3. feature 브랜치를 main에 merge
+```
+git branch main
+git merge firebase-storage
+```
 
 
 ## 4. 로컬 및 원격 브랜치 확인 및 동기화
