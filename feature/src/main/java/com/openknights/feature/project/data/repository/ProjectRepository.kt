@@ -15,16 +15,10 @@ class ProjectRepository(
     suspend fun getProjects(contestTerm: String): List<Project> {
         return try {
             val remoteProjects = remoteDataSource.getProjects(contestTerm)
-            if (remoteProjects.isNotEmpty()) {
-                Log.d("ProjectRepository", "DataSource: Fetched ${remoteProjects.size} projects from Firestore for term: $contestTerm.")
-                remoteProjects
-            } else {
-                Log.d("ProjectRepository", "DataSource: Firestore is empty for term: $contestTerm. Falling back to local data.")
-                getProjectsFromLocal(contestTerm)
-            }
+            remoteProjects
         } catch (e: Exception) {
-            Log.e("ProjectRepository", "DataSource: Error fetching from Firestore for term: $contestTerm. Falling back to local data.", e)
-            getProjectsFromLocal(contestTerm)
+            Log.e("ProjectRepository", "DataSource: Error fetching from Firestore for term: $contestTerm.", e)
+            emptyList()
         }
     }
 
