@@ -62,6 +62,8 @@ import com.openknights.data.repository.UserRepositoryImpl
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import android.content.Context
+import android.widget.Toast
+import com.openknights.designsystem.theme.knightsTypography
 
 
 // --- Navigation 대상 정의
@@ -105,7 +107,8 @@ fun OpenKnightsApp() {
                     Text(
                         "OpenKnights",
                         modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.knightsTypography.headlineMediumB
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -293,7 +296,10 @@ fun OpenKnightsApp() {
                         } else {
                             // Handle case where user is not logged in or UID is null
                             // Maybe navigate back to login or show a loading indicator
-                            Text("사용자 정보를 불러오는 중...")
+                            // Handle case where user is not logged in or UID is null
+                            // Maybe navigate back to login or show a loading indicator
+                            val context = LocalContext.current
+                            Toast.makeText(context, "로그인을 해야 알림을 볼 수 있습니다.", Toast.LENGTH_SHORT).show()
                         }
                     }
                     is RegisterScreenEntry -> NavEntry(entry) {

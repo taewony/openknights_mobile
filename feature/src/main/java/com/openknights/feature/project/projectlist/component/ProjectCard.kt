@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import com.openknights.designsystem.theme.KnightsColor
+import com.openknights.designsystem.color.KnightsColor
 import com.openknights.designsystem.theme.KnightsTheme
 import com.openknights.designsystem.theme.knightsTypography
 import com.openknights.model.Project
@@ -118,8 +118,9 @@ private fun ProjectPhaseChip(
 ) {
     OutlineChip(
         text = projectPhase.label,
-        borderColor = MaterialTheme.colorScheme.primary,
-        textColor = MaterialTheme.colorScheme.onSurface,
+        borderColor = KnightsColor.Blue03,
+        textColor = KnightsColor.Blue01,
+        backgroundColor = KnightsColor.Blue03,
         modifier = modifier
     )
 }

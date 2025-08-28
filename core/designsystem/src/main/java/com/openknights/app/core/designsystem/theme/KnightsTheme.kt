@@ -74,11 +74,11 @@ fun KnightsTheme(
 
     CompositionLocalProvider(
         LocalDarkTheme provides darkTheme,
-        LocalTypography provides KnightsTypography(),
+        LocalTypography provides LocalTypography.current,
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
-            typography = Material3Typography,
+            typography = Material3Typography(),
             shapes = KnightsShape,
             content = content
         )

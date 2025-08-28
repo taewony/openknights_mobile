@@ -20,6 +20,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.openknights.designsystem.theme.knightsTypography
+import androidx.compose.material3.MaterialTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,7 +72,7 @@ fun ProfileEditScreen(
                 onClick = { onSaveClick(name, description, profileImageUrl) },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Save Profile")
+                Text("Save Profile", style = MaterialTheme.knightsTypography.titleMediumB)
             }
         }
     }

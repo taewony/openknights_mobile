@@ -10,6 +10,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.MaterialTheme
+import com.openknights.designsystem.color.KnightsColor
 import com.openknights.ui.OutlineChip
 import com.openknights.designsystem.theme.KnightsTheme
 import com.openknights.model.Project
@@ -21,7 +22,7 @@ internal fun ProjectDetailChips(project: Project) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         project.phase?.let { phase ->
-            OutlineChip(text = phase.label, borderColor = MaterialTheme.colorScheme.primary, textColor = MaterialTheme.colorScheme.onSurface)
+            OutlineChip(text = phase.label, borderColor = KnightsColor.Blue03, textColor = KnightsColor.Blue01, backgroundColor = KnightsColor.Blue03)
         }
     }
 }

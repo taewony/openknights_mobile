@@ -40,6 +40,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import android.app.Application
 import kotlinx.coroutines.launch
+import com.openknights.designsystem.theme.knightsTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -117,14 +118,14 @@ fun LoginScreen(onBack: () -> Unit, onLoginSuccess: () -> Unit, onNavigateToRegi
                 if (uiState.isLoading) {
                     CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary)
                 } else {
-                    Text("로그인")
+                    Text("로그인", style = MaterialTheme.knightsTypography.titleMediumB)
                 }
             }
             TextButton(
                 onClick = onNavigateToRegister,
                 modifier = Modifier.padding(top = 8.dp)
             ) {
-                Text("계정이 없으신가요? 회원가입")
+                Text("계정이 없으신가요? 회원가입", style = MaterialTheme.knightsTypography.labelLargeM)
             }
         }
     }

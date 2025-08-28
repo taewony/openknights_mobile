@@ -17,13 +17,14 @@ fun OutlineChip(
     text: String,
     borderColor: Color,
     textColor: Color,
+    backgroundColor: Color,
     modifier: Modifier = Modifier,
 ) {
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(100.dp),
         border = BorderStroke(1.dp, borderColor),
-        color = Color.Transparent,
+        color = backgroundColor,
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),

@@ -42,6 +42,7 @@ import android.app.Application
 // import com.google.firebase.firestore.firestore
 
 import kotlinx.coroutines.launch
+import com.openknights.designsystem.theme.knightsTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -125,7 +126,7 @@ fun RegisterScreen(onBack: () -> Unit, onRegisterSuccess: () -> Unit) {
                 if (uiState.isLoading) {
                     CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary)
                 } else {
-                    Text("등록")
+                    Text("등록", style = MaterialTheme.knightsTypography.titleMediumB)
                 }
             }
         }

@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.openknights.designsystem.theme.KnightsColor
+import com.openknights.designsystem.color.KnightsColor
 import com.openknights.designsystem.theme.KnightsTheme
 import com.openknights.ui.TextChip
 

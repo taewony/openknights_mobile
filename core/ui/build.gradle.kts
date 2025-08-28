@@ -62,4 +62,5 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.material3)
     implementation(libs.coil)
+    implementation(project(":core:designsystem"))
 }

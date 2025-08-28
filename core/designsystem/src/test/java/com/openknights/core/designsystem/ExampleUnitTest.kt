@@ -1,4 +1,4 @@
-package com.openknights.designsystem
+package com.openknights.app.core.designsystem
 
 import org.junit.Test
 
